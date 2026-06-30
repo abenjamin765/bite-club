@@ -1,0 +1,80 @@
+# Dash Configuration — Coach-Led Meal Planning MVP
+# Tier is RULE-DERIVED. Designer may escalate, never lower.
+
+# --- Dash identity ---
+dash-name: "Coach-Led Meal Planning & Daily Check-In PWA"
+dash-id: "coach-meal-planning-mvp"
+owner: "Aaron (solo — product owner)"
+start-date: "2026-06-29"
+workspace: "/Users/aaron/Sites/food-log-app/dashes/coach-meal-planning-mvp"
+facilitation-mode: solo
+
+# --- Tier classification ---
+tier: "standard"
+computed-tier-rationale: >
+  Standard (rule-derived minimum):
+  (1) Two distinct user roles — Client and Coach;
+  (2) Pre-launch solo indie app — reach assumed <500 until validated;
+  (3) Health-related nutrition data present — Privacy gate mandatory at P7 (all tiers).
+  High-stakes escalation triggers (10k+ reach, enterprise rollout, HIPAA-covered
+  deployment) do not apply at this stage. Escalate to High-stakes before launch
+  if targeting regulated healthcare contexts or scaling past 500 users.
+tier-confirmed-by: "self (solo indie — external reviewer waived)"
+tier-confirmation-date: "2026-06-29"
+
+# --- Active phases ---
+phases-active:
+  - P0
+  - P1
+  - P2
+  - P3
+  - P4
+  - P5
+  - P6
+  - P7
+  - P8
+
+# --- Mandatory gates (Standard) ---
+gates-required:
+  - P1   # Evidence Gate
+  - P5   # Reconciliation Gate
+  - P6   # Selection Gate (when ≥2 concepts)
+  - P7   # Edge/Ethics/Equity Gate (all tiers)
+  - P8   # Learning Gate
+
+# --- Required artifacts ---
+artifacts-required:
+  - assumptions.md
+  - glossary.md
+  - ethics-equity-checklist.md
+  - metrics.md
+  - edge-state-matrix.md
+  - sign-off-ledger.md
+
+# --- Cross-functional sign-off ---
+cross-functional-sign-off:
+  required-disciplines: []
+  simulation-allowed: true   # Solo dash — owner simulates all roles
+
+# --- Supporting docs (pre-loaded) ---
+supporting-docs:
+  - docs/requirements.md
+  - docs/research.md
+
+# --- Default thresholds ---
+thresholds:
+  reach-high-stakes-users: 10000
+  reach-standard-users-min: 500
+  reach-standard-users-max: 9999
+  all-simulated-cap-quality2: "C"
+  team-all-simulated-rate-cap: 0.40
+  test-not-run-cap-quality3: "C"
+  concepts-not-distinct-cap-quality7: "B"
+  min-participants-per-role: 5
+  learning-close-sla-standard: 15
+  learning-close-sla-high-stakes: 30
+  spot-audit-per-cycle: 2
+
+tier-override-log: []
+
+# P8 plan assembly complete: 2026-06-29

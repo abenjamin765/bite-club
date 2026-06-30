@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Meal Plan</title>
+    <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+    <link rel="stylesheet" href="/app/assets/css/app.css" />
+  </head>
+  <body class="ios">
+    <div class="ios-viewport">
+      <main class="auth-screen">
+        <div class="auth-brand">
+          <span class="auth-logo" aria-hidden="true">
+            <img src="/app/assets/brand-mark.svg" alt="" />
+          </span>
+          <h1 class="auth-title">Meal Plan</h1>
+          <p class="auth-sub">Plan your week, check in daily, stay in sync with your coach.</p>
+        </div>
+
+        <form id="auth-form" class="stack-12">
+          <div class="list">
+            <div class="field-row">
+              <input class="field-input" type="email" name="email" placeholder="Email" autocomplete="email" required />
+            </div>
+            <div class="field-row">
+              <input class="field-input" type="password" name="password" placeholder="Password" minlength="8" autocomplete="current-password" required />
+            </div>
+            <div class="field-row" data-signup-only>
+              <input class="field-input" type="text" name="name" placeholder="Full name" autocomplete="name" />
+            </div>
+            <div class="field-row" data-signup-only>
+              <label for="role">I am a</label>
+              <select class="field-select" id="role" name="role">
+                <option value="client">Client</option>
+                <option value="coach">Coach</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn btn-filled btn-block" type="submit" id="primary-action" name="action" value="signin">
+            Log In
+          </button>
+          <p class="helper-text" id="auth-message" aria-live="polite"></p>
+          <button class="btn btn-plain btn-block" type="button" id="toggle-mode">
+            New here? Create an account
+          </button>
+        </form>
+      </main>
+    </div>
+
+    <script type="module">
+      import { signIn, signUp } from "/app/assets/js/auth.js";
+      import { getSupabaseClient } from "/app/assets/js/supabase.js";
+
+      const form = document.querySelector("#auth-form");
+      const message = document.querySelector("#auth-message");
+      const primary = document.querySelector("#primary-action");
+      const toggle = document.querySelector("#toggle-mode");
+      const signupOnly = Array.from(document.querySelectorAll("[data-signup-only]"));
+      let mode = "signin";
+
+      function applyMode() {
+        const isSignup = mode === "signup";
+        signupOnly.forEach((el) => {
+          el.style.display = isSignup ? "" : "none";
+        });
+        primary.textContent = isSignup ? "Create Account" : "Log In";
+        primary.value = mode;
+        toggle.textContent = isSignup
+          ? "Already have an account? Log in"
+          : "New here? Create an account";
+        message.textContent = "";
+      }
+
+      toggle.addEventListener("click", () => {
+        mode = mode === "signin" ? "signup" : "signin";
+        applyMode();
+      });
+
+      function setMessage(text, isError = false) {
+        message.textContent = text;
+        message.classList.toggle("is-error", isError);
+      }
+
+      async function ensureProfile(userId, email, name, role) {
+        localStorage.setItem("demo.role", role);
+        const supabase = getSupabaseClient();
+        if (!supabase) {
+          return;
+        }
+        await supabase.from("users").upsert(
+          {
+            id: userId,
+            email,
+            name,
+            role,
+            time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+          },
+          { onConflict: "id" }
+        );
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setMessage("Working\u2026");
+
+        const formData = new FormData(form);
+        const email = String(formData.get("email") || "");
+        const password = String(formData.get("password") || "");
+        const name = String(formData.get("name") || "");
+        const role = String(formData.get("role") || "client");
+
+        const fn = mode === "signup" ? signUp : signIn;
+        const { data, error } = await fn(email, password);
+        if (error) {
+          setMessage(error.message, true);
+          return;
+        }
+
+        const userId = data?.user?.id || data?.session?.user?.id;
+        if (userId) {
+          await ensureProfile(userId, email, name, role);
+        }
+        window.location.replace("/app/index.html");
+      });
+
+      applyMode();
+    </script>
+  </body>
+</html>

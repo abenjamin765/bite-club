@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="manifest" href="/app/manifest.json" />
+    <title>Meal Plan</title>
+    <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+    <link rel="stylesheet" href="/app/assets/css/app.css" />
+  </head>
+  <body class="ios">
+    <div class="ios-viewport">
+      <main class="center-screen">
+        <span class="auth-logo" aria-hidden="true">
+          <img src="/app/assets/brand-mark.svg" alt="" />
+        </span>
+        <p class="center-sub">Loading your workspace&#8230;</p>
+      </main>
+    </div>
+
+    <script type="module">
+      import { getSession, getProfile } from "/app/assets/js/auth.js";
+
+      async function bootstrap() {
+        const session = await getSession();
+        if (!session) {
+          window.location.replace("/app/auth/index.html");
+          return;
+        }
+        const profile = await getProfile(session.user.id);
+        if (profile?.role === "coach") {
+          window.location.replace("/app/coach/home.html");
+          return;
+        }
+        window.location.replace("/app/client/home.html");
+      }
+
+      bootstrap();
+    </script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/app/service-worker.js").catch(() => {});
+      }
+    </script>
+  </body>
+</html>

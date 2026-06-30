@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Today</title>
+    <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+    <link rel="stylesheet" href="/app/assets/css/app.css" />
+  </head>
+  <body class="ios">
+    <div class="ios-viewport">
+      <header class="nav-bar">
+        <div class="nav-bar-inner">
+          <span class="nav-title" id="nav-title">Today</span>
+          <span class="nav-trailing">
+            <button class="nav-btn" id="signout" type="button">Sign Out</button>
+          </span>
+        </div>
+      </header>
+
+      <main class="ios-scroll has-tabbar">
+        <h1 class="large-title" id="large-title">Today</h1>
+        <p class="large-title-sub" id="week-range">Week of Jun 30 &ndash; Jul 06</p>
+
+        <!-- Approved week: daily check-in focus -->
+        <section id="food-log-section">
+          <div class="hero-card with-ring">
+            <div>
+              <div class="hero-eyebrow">Daily Check-In</div>
+              <div class="hero-title">3 meals to confirm</div>
+              <div class="hero-sub">Mark each meal as followed, modified, or skipped. Usually under a minute.</div>
+            </div>
+            <div class="ring" style="--percent: 33">
+              <span class="ring-center">1/3</span>
+            </div>
+          </div>
+
+          <div class="list-group">
+            <div class="list">
+              <a class="row is-tappable" href="/app/client/checkin/index.html" data-nav>
+                <span class="row-icon is-green" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10H3m18 2.5V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22H12m4-20v4M8 2v4m6.5 13 2 2 4.5-4.5"/></svg>
+                </span>
+                <span class="row-main">
+                  <span class="row-title is-strong">Start check-in</span>
+                  <span class="row-sub">Not started yet</span>
+                </span>
+                <span class="pill is-orange">In progress</span>
+                <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+              </a>
+              <a class="row is-tappable" href="/app/client/plan/index.html" data-nav>
+                <span class="row-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10H3m13-8v4M8 2v4m-.2 16h8.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 19.72 21 18.88 21 17.2V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22Z"/></svg>
+                </span>
+                <span class="row-main">
+                  <span class="row-title">This week&rsquo;s plan</span>
+                  <span class="row-sub">Approved &middot; view meals</span>
+                </span>
+                <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Unapproved week: planning focus -->
+        <section id="plan-section" style="display: none">
+          <div class="hero-card with-ring">
+            <div>
+              <div class="hero-eyebrow">Weekly Plan</div>
+              <div class="hero-title">Build your week</div>
+              <div class="hero-sub">Add meals for each day, then submit to your coach for approval.</div>
+            </div>
+            <div class="ring" style="--percent: 61">
+              <span class="ring-center">61%</span>
+            </div>
+          </div>
+
+          <div class="list-group">
+            <div class="list">
+              <a class="row is-tappable" href="/app/client/plan/index.html" data-nav>
+                <span class="row-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10H3m13-8v4M8 2v4m-.2 16h8.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 19.72 21 18.88 21 17.2V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22Z"/></svg>
+                </span>
+                <span class="row-main">
+                  <span class="row-title is-strong">Open plan</span>
+                  <span class="row-sub" id="plan-status-sub">Draft &middot; not submitted</span>
+                </span>
+                <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+              </a>
+            </div>
+            <p class="list-footer">Your coach reviews each week before it becomes your daily check-in source.</p>
+          </div>
+        </section>
+      </main>
+
+      <nav class="tab-bar">
+        <div class="tab-bar-inner">
+              <a class="tab-item is-active" href="/app/client/home.html" data-nav>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.565c0-.574 0-.861.074-1.126a2 2 0 0 1 .318-.65c.163-.22.39-.397.843-.75l6.783-5.275c.351-.273.527-.41.72-.462a1 1 0 0 1 .523 0c.194.052.37.189.721.462l6.783 5.275c.453.353.68.53.843.75.145.195.252.416.318.65.074.265.074.552.074 1.126V17.8c0 1.12 0 1.68-.218 2.108a2 2 0 0 1-.874.874C19.48 21 18.92 21 17.8 21H6.2c-1.12 0-1.68 0-2.108-.218a2 2 0 0 1-.874-.874C3 19.48 3 18.92 3 17.8v-7.235Z"/></svg>
+            Today
+          </a>
+          <a class="tab-item" href="/app/client/plan/index.html" data-nav>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10H3m13-8v4M8 2v4m-.2 16h8.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 19.72 21 18.88 21 17.2V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22Z"/></svg>
+            Plan
+          </a>
+        </div>
+      </nav>
+    </div>
+
+    <script type="module">
+      import { requireAuth, signOut } from "/app/assets/js/auth.js";
+      import { bindNavLinks } from "/app/assets/js/router.js";
+      import { getSupabaseClient } from "/app/assets/js/supabase.js";
+
+      async function getLatestPlanStatus(userId) {
+        const supabase = getSupabaseClient();
+        if (!supabase) {
+          return localStorage.getItem("demo.planStatus") || "draft";
+        }
+        const { data } = await supabase
+          .from("weekly_meal_plans")
+          .select("status")
+          .eq("client_id", userId)
+          .order("week_start", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        return data?.status || "draft";
+      }
+
+      function renderMode(status) {
+        const approved = status === "approved" || status === "active";
+        document.querySelector("#food-log-section").style.display = approved ? "" : "none";
+        document.querySelector("#plan-section").style.display = approved ? "none" : "";
+        const title = approved ? "Today" : "Plan";
+        document.querySelector("#large-title").textContent = title;
+        document.querySelector("#nav-title").textContent = title;
+        document.querySelector("#plan-status-sub").textContent =
+          status === "submitted" ? "Submitted \u00b7 awaiting approval" : "Draft \u00b7 not submitted";
+      }
+
+      const session = await requireAuth("client");
+      if (session) {
+        renderMode(await getLatestPlanStatus(session.user.id));
+      }
+
+      document.querySelector("#signout").addEventListener("click", async () => {
+        await signOut();
+        window.location.replace("/app/auth/index.html");
+      });
+
+      bindNavLinks();
+    </script>
+  </body>
+</html>

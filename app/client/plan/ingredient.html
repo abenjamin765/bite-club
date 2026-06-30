@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Ingredients</title>
+    <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+    <link rel="stylesheet" href="/app/assets/css/app.css" />
+  </head>
+  <body class="ios">
+    <div class="ios-viewport">
+      <header class="nav-bar">
+        <div class="nav-bar-inner">
+          <span class="nav-leading">
+            <a class="nav-btn" href="/app/client/plan/day.html" data-nav>
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              Back
+            </a>
+          </span>
+          <span class="nav-title">Ingredients</span>
+          <span class="nav-trailing">
+            <a class="nav-btn is-strong" href="/app/client/plan/index.html" data-nav>Done</a>
+          </span>
+        </div>
+      </header>
+
+      <main class="ios-scroll has-actionbar">
+        <h1 class="large-title" id="meal-title">Chicken bowl</h1>
+
+        <div class="list-group">
+          <div class="list-header">In this meal</div>
+          <div class="list">
+            <div class="row">
+              <span class="row-main"><span class="row-title">Chicken breast</span><span class="row-sub">1 serving &middot; 165 kcal</span></span>
+              <span class="meal-chip lunch">Protein</span>
+              <span class="row-value">35g P</span>
+            </div>
+            <div class="row">
+              <span class="row-main"><span class="row-title">Jasmine rice</span><span class="row-sub">1 cup &middot; 205 kcal</span></span>
+              <span class="meal-chip snack">Carb</span>
+              <span class="row-value">45g C</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="list-group">
+          <div class="list-header">Add ingredient</div>
+          <div class="list">
+            <div class="field-row">
+              <input class="field-input" id="ing-name" placeholder="Search or enter a food" />
+            </div>
+            <div class="field-row">
+              <label for="ing-qty">Quantity</label>
+              <input class="field-input" id="ing-qty" type="number" step="0.1" value="1" inputmode="decimal" />
+            </div>
+            <div class="field-row">
+              <label for="ing-unit">Unit</label>
+              <input class="field-input" id="ing-unit" value="serving" />
+            </div>
+          </div>
+        </div>
+
+        <div class="list-group">
+          <div class="list-header">Copy from saved meals</div>
+          <div class="list">
+            <button class="row is-tappable" type="button">
+              <span class="row-main"><span class="row-title">Chicken and rice bowl</span><span class="row-sub">4 ingredients</span></span>
+              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <button class="row is-tappable" type="button">
+              <span class="row-main"><span class="row-title">Protein oatmeal</span><span class="row-sub">3 ingredients</span></span>
+              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <div class="action-bar">
+        <div class="action-bar-inner">
+          <button class="btn btn-gradient btn-block" id="add-ingredient">Add Ingredient</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireAuth } from "/app/assets/js/auth.js";
+      import { bindNavLinks } from "/app/assets/js/router.js";
+
+      await requireAuth("client");
+      bindNavLinks();
+
+      const lastMeal = localStorage.getItem("demo.lastMealName");
+      if (lastMeal) document.querySelector("#meal-title").textContent = lastMeal;
+    </script>
+  </body>
+</html>

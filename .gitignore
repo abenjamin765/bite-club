@@ -1,0 +1,16 @@
+# OS / editor
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# Secrets / local env
+.env
+.env.*
+
+# Python
+.venv/
+__pycache__/

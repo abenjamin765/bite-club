@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Plan</title>
+    <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+    <link rel="stylesheet" href="/app/assets/css/app.css" />
+  </head>
+  <body class="ios">
+    <div class="ios-viewport">
+      <header class="nav-bar">
+        <div class="nav-bar-inner">
+          <span class="nav-title">Plan</span>
+        </div>
+      </header>
+
+      <main class="ios-scroll has-actionbar">
+        <h1 class="large-title">Plan</h1>
+        <p class="large-title-sub">Week of Jun 30 &ndash; Jul 06</p>
+
+        <div class="day-strip" role="tablist" aria-label="Days of the week">
+          <a class="day-chip is-active" href="/app/client/plan/day.html?day=mon" data-nav><span class="dow">Mon</span><span class="dom">30</span></a>
+          <a class="day-chip" href="/app/client/plan/day.html?day=tue" data-nav><span class="dow">Tue</span><span class="dom">1</span></a>
+          <a class="day-chip" href="/app/client/plan/day.html?day=wed" data-nav><span class="dow">Wed</span><span class="dom">2</span></a>
+          <a class="day-chip" href="/app/client/plan/day.html?day=thu" data-nav><span class="dow">Thu</span><span class="dom">3</span></a>
+          <a class="day-chip" href="/app/client/plan/day.html?day=fri" data-nav><span class="dow">Fri</span><span class="dom">4</span></a>
+          <a class="day-chip" href="/app/client/plan/day.html?day=sat" data-nav><span class="dow">Sat</span><span class="dom">5</span></a>
+          <a class="day-chip" href="/app/client/plan/day.html?day=sun" data-nav><span class="dow">Sun</span><span class="dom">6</span></a>
+        </div>
+
+        <div class="list-group">
+          <div class="list-header">Weekly totals (planned)</div>
+          <div class="stat-group">
+            <div class="stat"><div class="stat-value">2,050</div><div class="stat-label">kcal</div></div>
+            <div class="stat"><div class="stat-value">156g</div><div class="stat-label">Protein</div></div>
+            <div class="stat"><div class="stat-value">190g</div><div class="stat-label">Carbs</div></div>
+            <div class="stat"><div class="stat-value">68g</div><div class="stat-label">Fat</div></div>
+          </div>
+          <div class="ring-stack" style="margin-top: 10px; justify-content: center">
+            <div class="ring ring-inline" style="--percent: 78; --ring-fill: var(--macro-protein)"><span class="ring-center">P</span></div>
+            <div class="ring ring-inline" style="--percent: 66; --ring-fill: var(--macro-carbs)"><span class="ring-center">C</span></div>
+            <div class="ring ring-inline" style="--percent: 54; --ring-fill: var(--macro-fat)"><span class="ring-center">F</span></div>
+          </div>
+        </div>
+
+        <div class="list-group">
+          <div class="list-header">Days</div>
+          <div class="list">
+            <a class="row is-tappable" href="/app/client/plan/day.html?day=mon" data-nav>
+              <span class="row-main"><span class="row-title">Monday</span><span class="row-sub">3 meals &middot; 2,050 kcal</span></span>
+              <span class="meal-chip breakfast">Breakfast</span>
+              <span class="meal-chip lunch">Lunch</span>
+              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+            <a class="row is-tappable" href="/app/client/plan/day.html?day=tue" data-nav>
+              <span class="row-main"><span class="row-title">Tuesday</span><span class="row-sub">2 meals &middot; 1,480 kcal</span></span>
+              <span class="meal-chip dinner">Dinner</span>
+              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+            <a class="row is-tappable" href="/app/client/plan/day.html?day=wed" data-nav>
+              <span class="row-main"><span class="row-title">Wednesday</span><span class="row-sub" style="color: var(--ios-tint)">Add meals</span></span>
+              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+          </div>
+          <p class="list-footer" id="status-footer">Add at least one meal to each day before submitting.</p>
+        </div>
+      </main>
+
+      <div class="action-bar">
+        <div class="action-bar-inner">
+          <button class="btn btn-gradient btn-block" id="submit-plan">Submit for Approval</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireAuth } from "/app/assets/js/auth.js";
+      import { bindNavLinks } from "/app/assets/js/router.js";
+      import { getSupabaseClient } from "/app/assets/js/supabase.js";
+
+      const session = await requireAuth("client");
+      bindNavLinks();
+
+      document.querySelector("#submit-plan").addEventListener("click", async () => {
+        const footer = document.querySelector("#status-footer");
+        const supabase = getSupabaseClient();
+        if (!session) return;
+
+        if (!supabase) {
+          localStorage.setItem("demo.planStatus", "submitted");
+          footer.textContent = "Submitted \u2014 awaiting coach approval (demo mode).";
+          return;
+        }
+
+        const { error } = await supabase.from("weekly_meal_plans").upsert(
+          {
+            client_id: session.user.id,
+            group_id: localStorage.getItem("demo.groupId"),
+            week_start: new Date().toISOString().slice(0, 10),
+            week_end: new Date(Date.now() + 6 * 86400000).toISOString().slice(0, 10),
+            status: "submitted",
+            submitted_at: new Date().toISOString(),
+          },
+          { onConflict: "client_id,week_start" }
+        );
+
+        footer.textContent = error
+          ? error.message
+          : "Submitted \u2014 awaiting coach approval.";
+      });
+    </script>
+  </body>
+</html>

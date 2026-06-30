@@ -1,0 +1,16 @@
+{
+  "name": "Meal Plan",
+  "short_name": "MealPlan",
+  "start_url": "/app/index.html",
+  "display": "standalone",
+  "background_color": "#f7f1ea",
+  "theme_color": "#ff9040",
+  "icons": [
+    {
+      "src": "/app/assets/brand-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

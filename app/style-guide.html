@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Meal Plan &mdash; Warm iOS UI Kit</title>
+    <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+    <link rel="stylesheet" href="/app/assets/css/app.css" />
+    <style>
+      .sg-section-label {
+        padding: 22px 20px 4px;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--ios-label-secondary);
+      }
+      .sg-doc-link {
+        display: block;
+        text-align: center;
+        padding: 12px 20px 0;
+        font-size: 14px;
+        color: var(--ios-tint);
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body class="ios">
+    <div class="ios-viewport">
+      <header class="nav-bar">
+        <div class="nav-bar-inner">
+          <span class="nav-leading">
+            <a class="nav-btn" href="/dashes/coach-meal-planning-mvp/style-guide.html">
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              Docs
+            </a>
+          </span>
+          <span class="nav-title">UI Kit</span>
+        </div>
+      </header>
+
+      <main class="ios-scroll has-tabbar">
+        <h1 class="large-title">Warm iOS UI Kit</h1>
+        <p class="large-title-sub">Live identity components from <code style="font-size:13px">app.css</code></p>
+
+        <div class="sg-section-label">Brand mark + sunrise</div>
+        <div class="list-group">
+          <div class="list">
+            <div class="row">
+              <span class="auth-logo" aria-hidden="true"><img src="/app/assets/brand-mark.svg" alt="" /></span>
+              <span class="row-main"><span class="row-title is-strong">Plate-check monogram</span><span class="row-sub">Sunrise gradient + rounded voice</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sg-section-label">Navigation</div>
+        <div class="list-group">
+          <div class="list">
+            <div class="row">
+              <span class="row-main"><span class="row-title">Nav bar + large title</span><span class="row-sub">Sticky blurred header, 34px title</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sg-section-label">Buttons</div>
+        <div class="list-group stack-8">
+          <button class="btn btn-gradient btn-block" type="button">Gradient Primary</button>
+          <button class="btn btn-filled btn-block" type="button">Filled</button>
+          <button class="btn btn-tinted btn-block" type="button">Tinted</button>
+          <button class="btn btn-gray btn-block" type="button">Gray</button>
+          <button class="btn btn-destructive btn-block" type="button">Destructive</button>
+        </div>
+
+        <div class="sg-section-label">Grouped list rows</div>
+        <div class="list-group">
+          <div class="list">
+            <a class="row is-tappable" href="#">
+              <span class="row-icon is-green" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <span class="row-main"><span class="row-title is-strong">Row title</span><span class="row-sub">Supporting detail</span></span>
+              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+            <div class="row"><span class="row-main"><span class="row-title">Value row</span></span><span class="row-value">Detail</span></div>
+          </div>
+        </div>
+
+        <div class="sg-section-label">Meal adherence</div>
+        <div class="list-group">
+          <article class="card">
+            <div class="row" style="padding:0 0 12px">
+              <span class="row-main"><span class="row-title is-strong">Chicken bowl</span><span class="row-sub">Lunch &middot; 610 kcal</span></span>
+              <span class="pill" data-demo-pill>To do</span>
+            </div>
+            <div class="segmented adherence" data-demo-segment>
+              <button type="button" data-status="followed">Followed</button>
+              <button type="button" data-status="modified">Modified</button>
+              <button type="button" data-status="skipped">Skipped</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="sg-section-label">Form fields</div>
+        <div class="list-group">
+          <div class="list">
+            <div class="field-row"><input class="field-input" placeholder="Plain input" /></div>
+            <div class="field-row"><label>Quantity</label><input class="field-input" type="number" value="1" /></div>
+            <div class="field-row"><label>Type</label><select class="field-select"><option>Lunch</option></select></div>
+            <div class="field-stack"><textarea class="field-textarea" rows="2" placeholder="Notes"></textarea></div>
+          </div>
+        </div>
+
+        <div class="sg-section-label">Stat group</div>
+        <div class="list-group">
+          <div class="stat-group">
+            <div class="stat"><div class="stat-value">2,050</div><div class="stat-label">kcal</div></div>
+            <div class="stat"><div class="stat-value">156g</div><div class="stat-label">Protein</div></div>
+            <div class="stat"><div class="stat-value">190g</div><div class="stat-label">Carbs</div></div>
+            <div class="stat"><div class="stat-value">68g</div><div class="stat-label">Fat</div></div>
+          </div>
+          <div class="ring-stack" style="margin-top: 10px; justify-content: center">
+            <div class="ring ring-inline" style="--percent: 78; --ring-fill: var(--macro-protein)"><span class="ring-center">P</span></div>
+            <div class="ring ring-inline" style="--percent: 66; --ring-fill: var(--macro-carbs)"><span class="ring-center">C</span></div>
+            <div class="ring ring-inline" style="--percent: 54; --ring-fill: var(--macro-fat)"><span class="ring-center">F</span></div>
+          </div>
+        </div>
+
+        <div class="sg-section-label">Status pills</div>
+        <div class="list-group" style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="pill is-green">Followed</span>
+          <span class="pill is-orange">Deviated</span>
+          <span class="pill is-red">Missed</span>
+          <span class="pill is-tint">New</span>
+        </div>
+
+        <div class="sg-section-label">Meal chips</div>
+        <div class="list-group" style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="meal-chip breakfast">Breakfast</span>
+          <span class="meal-chip lunch">Lunch</span>
+          <span class="meal-chip dinner">Dinner</span>
+          <span class="meal-chip snack">Snack</span>
+        </div>
+
+        <div class="sg-section-label">Day selector</div>
+        <div class="day-strip">
+          <a class="day-chip is-active" href="#"><span class="dow">Mon</span><span class="dom">30</span></a>
+          <a class="day-chip" href="#"><span class="dow">Tue</span><span class="dom">1</span></a>
+          <a class="day-chip" href="#"><span class="dow">Wed</span><span class="dom">2</span></a>
+          <a class="day-chip" href="#"><span class="dow">Thu</span><span class="dom">3</span></a>
+        </div>
+
+        <div class="sg-section-label">Hero card</div>
+        <div class="hero-card">
+          <div class="hero-eyebrow">Daily Check-In</div>
+          <div class="hero-title">3 meals to confirm</div>
+          <div class="hero-sub">Mark each meal as followed, modified, or skipped.</div>
+        </div>
+
+        <div class="sg-section-label">Success state</div>
+        <div class="list-group" style="text-align:center;padding:24px 16px">
+          <span class="success-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          </span>
+          <h2 class="center-title" style="margin-top:8px">Check-in submitted</h2>
+          <p class="center-sub" style="margin:0 auto">Your coach will see this in today&rsquo;s digest.</p>
+        </div>
+
+        <div class="sg-section-label">Icons — Untitled UI (free line)</div>
+        <div class="list-group" style="display:flex;gap:16px;flex-wrap:wrap;padding:16px 20px;align-items:center">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Home01"><path d="M3 10.565c0-.574 0-.861.074-1.126a2 2 0 0 1 .318-.65c.163-.22.39-.397.843-.75l6.783-5.275c.351-.273.527-.41.72-.462a1 1 0 0 1 .523 0c.194.052.37.189.721.462l6.783 5.275c.453.353.68.53.843.75.145.195.252.416.318.65.074.265.074.552.074 1.126V17.8c0 1.12 0 1.68-.218 2.108a2 2 0 0 1-.874.874C19.48 21 18.92 21 17.8 21H6.2c-1.12 0-1.68 0-2.108-.218a2 2 0 0 1-.874-.874C3 19.48 3 18.92 3 17.8v-7.235Z"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Calendar"><path d="M21 10H3m13-8v4M8 2v4m-.2 16h8.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 19.72 21 18.88 21 17.2V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22Z"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="CalendarCheck02"><path d="M21 10H3m18 2.5V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22H12m4-20v4M8 2v4m6.5 13 2 2 4.5-4.5"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Check"><path d="M20 6 9 17l-5-5"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="ChevronLeft"><path d="m15 18-6-6 6-6"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="ChevronRight"><path d="m9 18 6-6-6-6"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Plus"><path d="M12 5v14m-7-7h14"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="BookmarkCheck"><path d="m9 10.5 2 2L15.5 8M19 21V7.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C16.72 3 15.88 3 14.2 3H9.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C5 5.28 5 6.12 5 7.8V21l7-4 7 4Z"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="AlertTriangle"><path d="M12 9v4m0 4h.01M10.615 3.892 2.39 18.098c-.456.788-.684 1.182-.65 1.506a1 1 0 0 0 .406.705c.263.191.718.191 1.629.191h16.45c.91 0 1.365 0 1.628-.191a1 1 0 0 0 .407-.705c.034-.324-.195-.718-.65-1.506L13.383 3.892c-.454-.785-.681-1.178-.978-1.31a1 1 0 0 0-.813 0c-.296.132-.523.525-.978 1.31Z"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Clock"><path d="M12 6v6l4 2m6-2c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Z"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Grid01"><path d="M8.4 3H4.6c-.56 0-.84 0-1.054.109a1 1 0 0 0-.437.437C3 3.76 3 4.04 3 4.6v3.8c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C3.76 10 4.04 10 4.6 10h3.8c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C10 9.24 10 8.96 10 8.4V4.6c0-.56 0-.84-.109-1.054a1 1 0 0 0-.437-.437C9.24 3 8.96 3 8.4 3Zm11 0h-3.8c-.56 0-.84 0-1.054.109a1 1 0 0 0-.437.437C14 3.76 14 4.04 14 4.6v3.8c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C14.76 10 15.04 10 15.6 10h3.8c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C21 9.24 21 8.96 21 8.4V4.6c0-.56 0-.84-.109-1.054a1 1 0 0 0-.437-.437C20.24 3 19.96 3 19.4 3Zm0 11h-3.8c-.56 0-.84 0-1.054.109a1 1 0 0 0-.437.437C14 14.76 14 15.04 14 15.6v3.8c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C14.76 21 15.04 21 15.6 21h3.8c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C21 20.24 21 19.96 21 19.4v-3.8c0-.56 0-.84-.109-1.054a1 1 0 0 0-.437-.437C20.24 14 19.96 14 19.4 14Zm-11 0H4.6c-.56 0-.84 0-1.054.109a1 1 0 0 0-.437.437C3 14.76 3 15.04 3 15.6v3.8c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C3.76 21 4.04 21 4.6 21h3.8c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C10 20.24 10 19.96 10 19.4v-3.8c0-.56 0-.84-.109-1.054a1 1 0 0 0-.437-.437C9.24 14 8.96 14 8.4 14Z"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="List"><path d="M21 12H9m12-6H9m12 12H9m-4-6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0-6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 12a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/></svg>
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="LogOut01"><path d="m16 17 5-5m0 0-5-5m5 5H9m0-9H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 5.28 3 6.12 3 7.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 21 6.12 21 7.8 21H9"/></svg>
+        </div>
+        <p style="font-size:12px;color:var(--ios-label-tertiary);padding:0 20px 8px">Untitled UI Icons — free line set. MIT licensed. <a href="https://www.untitledui.com/free-icons" style="color:var(--ios-tint)">untitledui.com/free-icons</a></p>
+
+        <a class="sg-doc-link" href="/dashes/coach-meal-planning-mvp/style-guide.html">Full style guide (tokens, screen map, a11y)</a>
+        <div style="height: 24px"></div>
+      </main>
+
+      <nav class="tab-bar">
+        <div class="tab-bar-inner">
+          <a class="tab-item is-active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.565c0-.574 0-.861.074-1.126a2 2 0 0 1 .318-.65c.163-.22.39-.397.843-.75l6.783-5.275c.351-.273.527-.41.72-.462a1 1 0 0 1 .523 0c.194.052.37.189.721.462l6.783 5.275c.453.353.68.53.843.75.145.195.252.416.318.65.074.265.074.552.074 1.126V17.8c0 1.12 0 1.68-.218 2.108a2 2 0 0 1-.874.874C19.48 21 18.92 21 17.8 21H6.2c-1.12 0-1.68 0-2.108-.218a2 2 0 0 1-.874-.874C3 19.48 3 18.92 3 17.8v-7.235Z"/></svg>Today</a>
+          <a class="tab-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10H3m13-8v4M8 2v4m-.2 16h8.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 19.72 21 18.88 21 17.2V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22Z"/></svg>Plan</a>
+        </div>
+      </nav>
+    </div>
+
+    <script>
+      const pillMap = { followed: ["Followed", "is-green"], modified: ["Modified", "is-orange"], skipped: ["Skipped", "is-red"] };
+      document.querySelector("[data-demo-segment]").addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-status]");
+        if (!button) return;
+        button.parentElement.querySelectorAll("button").forEach((b) => b.classList.remove("is-active"));
+        button.classList.add("is-active");
+        const pill = document.querySelector("[data-demo-pill]");
+        const [text, cls] = pillMap[button.dataset.status] || ["To do", ""];
+        pill.textContent = text;
+        pill.className = "pill " + cls;
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,172 @@
+/**
+ * Design tokens — Coach-Led Meal Planning MVP
+ * Palette source: ColorSpace monochromatic from #FF6B00
+ * https://mycolor.space/?hex=%23FF6B00&sub=1
+ */
+
+:root {
+  /* Brand scale — monochromatic tints & shades */
+  --color-brand-50: #ffeddf;
+  --color-brand-100: #ffdabf;
+  --color-brand-200: #ffc89f;
+  --color-brand-300: #ffb580;
+  --color-brand-400: #ffa360;
+  --color-brand-500: #ff9040;
+  --color-brand-600: #ff7e20;
+  --color-brand-700: #ff6b00;
+  --color-brand-800: #df5e00;
+  --color-brand-900: #bf5000;
+  --color-brand-950: #9f4300;
+  --color-brand-1000: #602800;
+
+  /* Brand identity */
+  --color-brand: var(--color-brand-700);
+  --color-accent: #ffb100;
+  --color-brand-top: var(--color-brand-500);
+  --color-brand-shell: var(--color-brand-900);
+  --color-brand-0: #ffffff;
+  --gradient-sunrise: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-brand) 55%,
+    var(--color-brand-800) 100%
+  );
+
+  /* Warm canvas + surfaces */
+  --color-canvas-warm: #f7f1ea;
+  --color-canvas-warm-2: #fff9f3;
+  --color-surface: rgba(255, 255, 255, 0.94);
+  --color-surface-card: rgba(255, 255, 255, 0.96);
+  --color-surface-segment: rgba(96, 40, 0, 0.08);
+  --color-surface-muted: rgba(255, 255, 255, 0.9);
+  --color-surface-neutral: rgba(255, 255, 255, 0.9);
+  --color-surface-step: rgba(96, 40, 0, 0.07);
+  --color-surface-elevated: #fffdfb;
+  --color-surface-sticky: rgba(255, 249, 243, 0.86);
+  --color-surface-selected: rgba(255, 255, 255, 0.75);
+  --color-surface-brand-subtle: var(--color-brand-50);
+
+  /* Text */
+  --color-text: #2a1e18;
+  --color-text-on-brand: #ffffff;
+  --color-text-muted: #7b665a;
+  --color-text-meta: #5e4a3f;
+  --color-text-warm: var(--color-brand-950);
+  --color-text-meal-type: var(--color-brand-900);
+  --color-text-segment: #3c2b23;
+  --color-text-fast-path: #3c2b23;
+  --color-text-doc: #2f211a;
+  --color-text-doc-muted: #654f43;
+  --color-text-doc-heading: #2f241e;
+
+  /* Actions */
+  --color-action: var(--color-brand);
+  --color-action-hover: var(--color-brand-800);
+  --color-action-pressed: var(--color-brand-900);
+  --color-action-neutral: #5e4a3f;
+  --color-action-danger: #ff4f63;
+
+  /* Semantic */
+  --color-warn-bg: rgba(255, 79, 99, 0.14);
+  --color-warn-text: #b83849;
+  --color-ok-bg: rgba(52, 199, 89, 0.14);
+  --color-ok-text: #1f7a39;
+  --color-tag-neutral-bg: rgba(96, 40, 0, 0.1);
+  --color-tag-neutral-text: #5e4a3f;
+
+  /* Data accents */
+  --macro-protein: #e5484d;
+  --macro-carbs: #f5a524;
+  --macro-fat: #9b6dff;
+  --macro-calories: #2a1e18;
+
+  /* Borders & shadows */
+  --color-border: rgba(140, 102, 79, 0.2);
+  --color-border-strong: rgba(140, 102, 79, 0.28);
+  --color-border-selected: rgba(140, 102, 79, 0.2);
+  --color-border-on-brand: rgba(255, 255, 255, 0.45);
+  --color-border-on-brand-strong: rgba(255, 255, 255, 0.62);
+  --color-shadow: rgba(58, 33, 19, 0.14);
+  --color-shadow-brand: rgba(120, 60, 10, 0.26);
+  --color-shadow-phone: rgba(108, 66, 34, 0.24);
+  --color-chip-bg: rgba(255, 255, 255, 0.24);
+  --color-fast-path-bg: rgba(255, 255, 255, 0.94);
+  --color-banner-bg: rgba(255, 255, 255, 0.25);
+  --color-banner-border: rgba(255, 255, 255, 0.4);
+  --color-weekday-inactive: rgba(255, 255, 255, 0.3);
+  --color-app-name: rgba(255, 255, 255, 1);
+  --color-brand-transparent: rgba(255, 107, 0, 0);
+
+  /* Legacy aliases (wireframe compatibility) */
+  --orange: var(--color-brand);
+  --surface: var(--color-surface-card);
+  --card: var(--color-surface-card);
+  --white: var(--color-brand-0);
+  --text: var(--color-text);
+  --muted: var(--color-text-muted);
+  --shadow: var(--color-shadow);
+  --line: var(--color-border);
+  --selected: var(--color-brand-0);
+  --seg-bg: var(--color-surface-segment);
+
+  /* Typography */
+  --font-sans: "SF Pro Text", "Inter", "Roboto", Arial, sans-serif;
+  --font-rounded: ui-rounded, "SF Pro Rounded", "Avenir Next Rounded",
+    "SF Pro Text", "Inter", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-md: 16px;
+  --text-lg: 16px;
+  --text-xl: 18px;
+  --text-2xl: 20px;
+  --text-3xl: 24px;
+  --text-4xl: 28px;
+  --text-5xl: 32px;
+  --text-display: 32px;
+
+  --font-weight-semibold: 500;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 700;
+  --font-weight-heavy: 760;
+  --font-weight-max: 780;
+
+  --line-height-tight: 1;
+  --line-height-snug: 1.05;
+  --line-height-normal: 1.15;
+  --line-height-body: 1.35;
+
+  /* Spacing (4px base) */
+  --space-1: 4px;
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-4: 10px;
+  --space-5: 12px;
+  --space-6: 16px;
+  --space-7: 18px;
+  --space-8: 20px;
+  --space-9: 24px;
+  --space-10: 88px;
+  --space-11: 129px;
+
+  /* Radius */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-4xl: 32px;
+  --radius-pill: 999px;
+  --radius-phone: 34px;
+
+  /* Layout */
+  --touch-min: 44px;
+  --phone-min-height: 760px;
+  --phone-min-height-sm: 700px;
+  --content-max: 402px;
+  --submit-scrim-height: 96px;
+}

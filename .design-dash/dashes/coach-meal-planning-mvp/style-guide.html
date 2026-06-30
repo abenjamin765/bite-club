@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meal Plan — Style Guide</title>
+  <meta name="description" content="Production design system for the Meal Plan PWA — warm iOS UI with sunrise brand identity." />
+  <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+  <link rel="stylesheet" href="/app/assets/css/app.css" />
+  <link rel="stylesheet" href="styles/doc.css" />
+</head>
+<body class="style-guide-page">
+  <header class="sg-hero">
+    <h1>Meal Plan — Style Guide</h1>
+    <p>Production design system for the shipping PWA. Native iOS patterns with a warm food-forward identity: sunrise gradient, rounded display type, plate-check monogram, progress rings, meal chips, and Untitled UI line icons.</p>
+    <nav class="sg-nav-links">
+      <a href="/app/style-guide.html">Live iOS UI Kit</a>
+      <a href="/app/index.html">Open app</a>
+      <a href="wireframe.html">Wireframes</a>
+      <a href="/app/assets/css/tokens.css">tokens.css</a>
+      <a href="/app/assets/css/app.css">app.css</a>
+    </nav>
+  </header>
+
+  <section class="sg-section">
+    <h2>Visual direction</h2>
+    <p class="sg-lead">The app should feel like a built iOS app — now with a distinct warm brand layer. Content sits on a warm paper canvas, elevated cards stay bright, and signature sunrise accents guide priority actions.</p>
+    <ul class="checks">
+      <li><strong>Platform feel:</strong> iOS Human Interface Guidelines — large titles, blurred nav/action bars, tab bar navigation</li>
+      <li><strong>Brand:</strong> Monochromatic orange scale from <a href="https://mycolor.space/?hex=%23FF6B00&amp;sub=1">ColorSpace #FF6B00</a> + amber support accent (#FFB100) for the sunrise gradient</li>
+      <li><strong>Semantic colors:</strong> Green = followed, orange = deviated, red = missed/skipped</li>
+      <li><strong>Density:</strong> 44px minimum touch targets; 17px body text; generous grouped spacing</li>
+      <li><strong>Icons:</strong> <a href="https://www.untitledui.com/free-icons">Untitled UI Icons</a> — free line set (1,100+ SVGs, MIT licensed). Inlined in HTML; no runtime CDN dependency.</li>
+    </ul>
+  </section>
+
+  <section class="sg-section">
+    <h2>Color tokens</h2>
+    <p class="sg-lead">Brand tokens live in <code>tokens.css</code>. Warm iOS semantic aliases and component identity live in <code>app.css</code>.</p>
+
+    <h3>Brand — ColorSpace monochromatic (<a href="https://mycolor.space/?hex=%23FF6B00&amp;sub=1">#FF6B00</a>)</h3>
+    <div class="sg-swatch-grid">
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#FFEDDF;color:#602800">#FFEDDF</div><div class="sg-swatch-meta"><strong>--color-brand-50</strong>Subtle bg</div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#FFDABF;color:#602800">#FFDABF</div><div class="sg-swatch-meta"><strong>--color-brand-100</strong>Tinted btn bg</div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#FFC89F;color:#602800">#FFC89F</div><div class="sg-swatch-meta"><strong>--color-brand-200</strong>Light accent</div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#FFB580;color:#401B00">#FFB580</div><div class="sg-swatch-meta"><strong>--color-brand-300</strong></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#FFA360;color:#401B00">#FFA360</div><div class="sg-swatch-meta"><strong>--color-brand-400</strong></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#FF9040;color:#fff">#FF9040</div><div class="sg-swatch-meta"><strong>--color-brand-500</strong>Gradient start</div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#FF7E20;color:#fff">#FF7E20</div><div class="sg-swatch-meta"><strong>--color-brand-600</strong></div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#FF6B00;color:#fff">#FF6B00</div><div class="sg-swatch-meta"><strong>--color-brand</strong>Primary / tint</div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#DF5E00;color:#fff">#DF5E00</div><div class="sg-swatch-meta"><strong>--color-brand-800</strong>Hover</div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#BF5000;color:#fff">#BF5000</div><div class="sg-swatch-meta"><strong>--color-brand-900</strong>Gradient end</div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#9F4300;color:#fff">#9F4300</div><div class="sg-swatch-meta"><strong>--color-brand-950</strong>Warm text</div></div>
+      <div class="sg-swatch"><div class="sg-swatch-color" style="background:#602800;color:#fff">#602800</div><div class="sg-swatch-meta"><strong>--color-brand-1000</strong>Deep shade</div></div>
+    </div>
+
+    <h3 style="margin-top:24px">Warm iOS aliases (app.css)</h3>
+    <table class="sg-token-table">
+      <thead>
+        <tr><th>Token</th><th>Value</th><th>Use</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>--ios-bg-grouped</code></td><td>#F7F1EA</td><td>Warm paper canvas</td></tr>
+        <tr><td><code>--ios-bg-elevated</code></td><td>#FFFDFB</td><td>Cards, list groups</td></tr>
+        <tr><td><code>--ios-bg-bar</code></td><td>rgba(255,245,236,0.82)</td><td>Nav bar, tab bar, action bar (blurred)</td></tr>
+        <tr><td><code>--ios-label</code></td><td>#2A1E18</td><td>Primary text</td></tr>
+        <tr><td><code>--ios-label-secondary</code></td><td>Warm 65% ink mix</td><td>Subtitles, section headers</td></tr>
+        <tr><td><code>--ios-separator</code></td><td>rgba(140,102,79,0.2)</td><td>Inset row dividers</td></tr>
+        <tr><td><code>--ios-fill</code></td><td>rgba(150,110,80,0.12)</td><td>Segmented track, gray buttons</td></tr>
+        <tr><td><code>--ios-tint</code></td><td>var(--color-brand)</td><td>Links, filled buttons, active tab</td></tr>
+        <tr><td><code>--gradient-sunrise</code></td><td>Amber → Orange → Deep Orange</td><td>Hero cards, gradient CTA, logo mood</td></tr>
+        <tr><td><code>--macro-protein / carbs / fat</code></td><td>#E5484D / #F5A524 / #9B6DFF</td><td>Macro ring hues</td></tr>
+        <tr><td><code>--ios-green</code></td><td>#34c759</td><td>Followed state</td></tr>
+        <tr><td><code>--ios-orange</code></td><td>#ff9500</td><td>Modified / deviated</td></tr>
+        <tr><td><code>--ios-red</code></td><td>#ff3b30</td><td>Skipped / missed</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="sg-section">
+    <h2>Typography</h2>
+    <p class="sg-lead">System body stack: <code>-apple-system, SF Pro Text</code>. Rounded display voice for large titles, hero copy, and key numerals via <code>--font-rounded</code>.</p>
+    <div class="sg-type-row"><div class="sg-type-label">Large title</div><div style="font:730 34px/41px var(--font-rounded);letter-spacing:0.008em">Today&rsquo;s meals</div></div>
+    <div class="sg-type-row"><div class="sg-type-label">Nav title</div><div style="font:600 17px var(--ios-font);letter-spacing:-0.02em">Check-In</div></div>
+    <div class="sg-type-row"><div class="sg-type-label">Body / row</div><div style="font:400 17px/22px var(--ios-font)">Overnight oats</div></div>
+    <div class="sg-type-row"><div class="sg-type-label">Row subtitle</div><div style="font:400 14px var(--ios-font);color:var(--ios-label-secondary)">Breakfast &middot; 420 kcal planned</div></div>
+    <div class="sg-type-row"><div class="sg-type-label">Section header</div><div style="font:400 13px var(--ios-font);text-transform:uppercase;color:var(--ios-label-secondary)">Needs attention</div></div>
+    <div class="sg-type-row"><div class="sg-type-label">Stat value</div><div style="font:730 20px var(--font-rounded);letter-spacing:-0.02em;font-variant-numeric:tabular-nums">2,050</div></div>
+  </section>
+
+  <section class="sg-section">
+    <h2>Layout shell</h2>
+    <p class="sg-lead">Every app screen uses <code>body.ios</code> &gt; <code>.ios-viewport</code> (max 440px). Safe-area insets apply automatically.</p>
+    <ul class="checks">
+      <li><strong>Nav bar</strong> — sticky, blurred; 44px inner height + safe-area top</li>
+      <li><strong>Large title</strong> — scrolls with content below nav bar</li>
+      <li><strong>Grouped content</strong> — <code>.list-group</code> with 16px horizontal inset</li>
+      <li><strong>Tab bar</strong> — fixed bottom for primary navigation (client: Today / Plan; coach: Dashboard / Digest)</li>
+      <li><strong>Action bar</strong> — fixed bottom for primary CTA (Submit, Approve); use <code>.ios-scroll.has-actionbar</code></li>
+    </ul>
+    <pre class="sg-code">&lt;body class="ios"&gt;
+  &lt;div class="ios-viewport"&gt;
+    &lt;header class="nav-bar"&gt;…&lt;/header&gt;
+    &lt;main class="ios-scroll has-tabbar"&gt;
+      &lt;h1 class="large-title"&gt;Title&lt;/h1&gt;
+      …
+    &lt;/main&gt;
+    &lt;nav class="tab-bar"&gt;…&lt;/nav&gt;
+  &lt;/div&gt;
+&lt;/body&gt;</pre>
+  </section>
+
+  <section class="sg-section">
+    <h2>Components</h2>
+    <p class="sg-lead">Live previews using production CSS. Class names map 1:1 to the app.</p>
+    <div class="sg-inline-demo" style="margin-bottom:16px">
+      <span class="auth-logo" aria-hidden="true"><img src="/app/assets/brand-mark.svg" alt="" /></span>
+      <span class="meal-chip breakfast">Breakfast</span>
+      <span class="meal-chip lunch">Lunch</span>
+      <span class="meal-chip dinner">Dinner</span>
+      <span class="meal-chip snack">Snack</span>
+    </div>
+
+    <div class="sg-ios-grid">
+      <div>
+        <p class="sg-ios-caption">Navigation + large title</p>
+        <div class="sg-ios-frame">
+          <header class="nav-bar">
+            <div class="nav-bar-inner">
+              <span class="nav-leading"><button class="nav-btn" type="button"><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Today</button></span>
+              <span class="nav-title">Check-In</span>
+              <span class="nav-trailing"><button class="nav-btn" type="button">All followed</button></span>
+            </div>
+          </header>
+          <main class="ios-scroll">
+            <h1 class="large-title">Today&rsquo;s meals</h1>
+            <p class="large-title-sub">Mark each meal, then submit.</p>
+          </main>
+        </div>
+        <p style="margin-top:8px"><span class="sg-class-tag">.nav-bar</span><span class="sg-class-tag">.large-title</span><span class="sg-class-tag">.nav-btn</span></p>
+      </div>
+
+      <div>
+        <p class="sg-ios-caption">Grouped list rows</p>
+        <div class="sg-ios-frame">
+          <main class="ios-scroll" style="padding-top:12px">
+            <div class="list-group">
+              <div class="list-header">Today</div>
+              <div class="list">
+                <a class="row is-tappable" href="#">
+                  <span class="row-icon is-green" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10H3m18 2.5V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22H12m4-20v4M8 2v4m6.5 13 2 2 4.5-4.5"/></svg></span>
+                  <span class="row-main"><span class="row-title is-strong">Start check-in</span><span class="row-sub">Not started yet</span></span>
+                  <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                </a>
+                <div class="row">
+                  <span class="row-main"><span class="row-title">Weekly totals</span></span>
+                  <span class="row-value">2,050 kcal</span>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+        <p style="margin-top:8px"><span class="sg-class-tag">.list</span><span class="sg-class-tag">.row</span><span class="sg-class-tag">.row-icon</span><span class="sg-class-tag">.list-header</span></p>
+      </div>
+
+      <div>
+        <p class="sg-ios-caption">Meal adherence card</p>
+        <div class="sg-ios-frame">
+          <main class="ios-scroll" style="padding-top:12px">
+            <div class="list-group">
+              <article class="card">
+                <div class="row" style="padding:0 0 12px">
+                  <span class="row-main"><span class="row-title is-strong">Overnight oats</span><span class="row-sub">Breakfast &middot; 420 kcal</span></span>
+                  <span class="pill is-orange">Modified</span>
+                </div>
+                <div class="segmented adherence">
+                  <button type="button" data-status="followed">Followed</button>
+                  <button type="button" data-status="modified" class="is-active">Modified</button>
+                  <button type="button" data-status="skipped">Skipped</button>
+                </div>
+              </article>
+            </div>
+          </main>
+        </div>
+        <p style="margin-top:8px"><span class="sg-class-tag">.card</span><span class="sg-class-tag">.segmented.adherence</span><span class="sg-class-tag">.pill</span></p>
+      </div>
+
+      <div>
+        <p class="sg-ios-caption">Hero card + stat group</p>
+        <div class="sg-ios-frame">
+          <main class="ios-scroll" style="padding-top:12px">
+            <div class="hero-card with-ring">
+              <div>
+              <div class="hero-eyebrow">Daily Check-In</div>
+              <div class="hero-title">3 meals to confirm</div>
+              <div class="hero-sub">Mark each meal as followed, modified, or skipped.</div>
+              </div>
+              <div class="ring" style="--percent:66"><span class="ring-center">2/3</span></div>
+            </div>
+            <div class="list-group">
+              <div class="stat-group">
+                <div class="stat"><div class="stat-value">2,050</div><div class="stat-label">kcal</div></div>
+                <div class="stat"><div class="stat-value">156g</div><div class="stat-label">Protein</div></div>
+                <div class="stat"><div class="stat-value">190g</div><div class="stat-label">Carbs</div></div>
+                <div class="stat"><div class="stat-value">68g</div><div class="stat-label">Fat</div></div>
+              </div>
+            </div>
+          </main>
+        </div>
+        <p style="margin-top:8px"><span class="sg-class-tag">.hero-card</span><span class="sg-class-tag">.stat-group</span></p>
+      </div>
+
+      <div>
+        <p class="sg-ios-caption">Buttons</p>
+        <div class="sg-ios-frame">
+          <main class="ios-scroll stack-8" style="padding:16px">
+            <button class="btn btn-filled btn-block" type="button">Filled</button>
+            <button class="btn btn-tinted btn-block" type="button">Tinted</button>
+            <button class="btn btn-gray btn-block" type="button">Gray</button>
+            <button class="btn btn-destructive btn-block" type="button">Destructive</button>
+          </main>
+        </div>
+        <p style="margin-top:8px"><span class="sg-class-tag">.btn-filled</span><span class="sg-class-tag">.btn-tinted</span><span class="sg-class-tag">.btn-gray</span></p>
+      </div>
+
+      <div>
+        <p class="sg-ios-caption">Day selector</p>
+        <div class="sg-ios-frame">
+          <main class="ios-scroll" style="padding-top:12px">
+            <div class="day-strip">
+              <a class="day-chip is-active" href="#"><span class="dow">Mon</span><span class="dom">30</span></a>
+              <a class="day-chip" href="#"><span class="dow">Tue</span><span class="dom">1</span></a>
+              <a class="day-chip" href="#"><span class="dow">Wed</span><span class="dom">2</span></a>
+              <a class="day-chip" href="#"><span class="dow">Thu</span><span class="dom">3</span></a>
+            </div>
+          </main>
+        </div>
+        <p style="margin-top:8px"><span class="sg-class-tag">.day-strip</span><span class="sg-class-tag">.day-chip</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sg-section">
+    <h2>Status pills</h2>
+    <div class="sg-inline-demo">
+      <span class="pill is-green">Followed</span>
+      <span class="pill is-orange">Deviated</span>
+      <span class="pill is-red">Missed</span>
+      <span class="pill is-tint">New</span>
+      <span class="pill">Draft</span>
+    </div>
+    <p class="sg-lead">Use semantic colors for adherence and digest states. Never use red for &ldquo;cheated&rdquo; framing — copy stays neutral (&ldquo;Skipped&rdquo;, &ldquo;Modified&rdquo;).</p>
+  </section>
+
+  <section class="sg-section">
+    <h2>Screen map</h2>
+    <table class="sg-token-table">
+      <thead>
+        <tr><th>Screen</th><th>Shell</th><th>Key components</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Auth</td><td>Centered form, no tab bar</td><td><code>.auth-screen</code>, grouped <code>.list</code> fields</td></tr>
+        <tr><td>Client home</td><td>Tab bar + large title</td><td><code>.hero-card</code>, mode switch (Plan vs Today)</td></tr>
+        <tr><td>Plan wizard</td><td>Action bar</td><td><code>.day-strip</code>, <code>.stat-group</code>, day rows</td></tr>
+        <tr><td>Check-in</td><td>Action bar</td><td><code>.segmented.adherence</code>, deviation fields, submit gating</td></tr>
+        <tr><td>Coach dashboard</td><td>Tab bar</td><td>Digest stats, plan queue rows</td></tr>
+        <tr><td>Coach digest</td><td>Tab bar</td><td>Attention list, on-track list, status pills</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="sg-section">
+    <h2>Accessibility</h2>
+    <ul class="checks">
+      <li>Minimum 44&times;44px touch targets on all interactive elements</li>
+      <li>Segmented controls use <code>role="group"</code> with per-meal <code>aria-label</code></li>
+      <li>Status communicated by text + color (pills), not color alone</li>
+      <li>Form errors use <code>.helper-text.is-error</code> with <code>aria-live="polite"</code></li>
+      <li>Safe-area insets via <code>env(safe-area-inset-*)</code> on nav, tab, and action bars</li>
+      <li>Neutral deviation language: &ldquo;Modified&rdquo; / &ldquo;Skipped&rdquo; — no shame framing</li>
+    </ul>
+  </section>
+
+  <section class="sg-section">
+    <h2>CSS usage</h2>
+    <p class="sg-lead">App pages load brand tokens + iOS system. Wireframe/doc pages may additionally load <code>components.css</code> and <code>doc.css</code>.</p>
+    <pre class="sg-code">&lt;!-- Production app screens --&gt;
+&lt;link rel="stylesheet" href="/app/assets/css/tokens.css" /&gt;
+&lt;link rel="stylesheet" href="/app/assets/css/app.css" /&gt;
+
+&lt;!-- Wireframes / design docs only --&gt;
+&lt;link rel="stylesheet" href="styles/components.css" /&gt;
+&lt;link rel="stylesheet" href="styles/doc.css" /&gt;</pre>
+  </section>
+
+  <section class="sg-section">
+    <h2>Design history</h2>
+    <p class="sg-lead">Earlier exploration artifacts — superseded by the iOS system above.</p>
+    <details class="sg-archive">
+      <summary>Figma mockup &amp; wireframe styling (archived)</summary>
+      <ul class="checks">
+        <li><a href="https://www.figma.com/design/MANsKQ146lmaMQSO1QrcX7/Untitled?node-id=5-47">Figma node 5:47</a> — orange shell, translucent cards, Roboto type</li>
+        <li><a href="wireframe.html">wireframe.html</a> — phone mockup frame, <code>.phone</code> shell, <code>components.css</code></li>
+        <li>These remain for flow/state reference; do not use for new app screens</li>
+      </ul>
+    </details>
+  </section>
+
+  <script>
+    document.querySelectorAll(".segmented.adherence button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const group = button.closest(".segmented");
+        group.querySelectorAll("button").forEach((b) => b.classList.remove("is-active"));
+        button.classList.add("is-active");
+        const pill = button.closest(".card")?.querySelector(".pill");
+        if (!pill) return;
+        const map = { followed: ["Followed", "is-green"], modified: ["Modified", "is-orange"], skipped: ["Skipped", "is-red"] };
+        const [text, cls] = map[button.dataset.status] || ["To do", ""];
+        pill.textContent = text;
+        pill.className = "pill " + cls;
+      });
+    });
+  </script>
+</body>
+</html>

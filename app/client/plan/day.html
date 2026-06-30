@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Day Plan</title>
+    <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+    <link rel="stylesheet" href="/app/assets/css/app.css" />
+  </head>
+  <body class="ios">
+    <div class="ios-viewport">
+      <header class="nav-bar">
+        <div class="nav-bar-inner">
+          <span class="nav-leading">
+            <a class="nav-btn" href="/app/client/plan/index.html" data-nav>
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              Plan
+            </a>
+          </span>
+          <span class="nav-title" id="nav-title">Monday</span>
+        </div>
+      </header>
+
+      <main class="ios-scroll has-actionbar">
+        <h1 class="large-title" id="day-title">Monday</h1>
+
+        <div class="list-group">
+          <div class="list-header">Meals</div>
+          <div class="list">
+            <a class="row is-tappable" href="/app/client/plan/ingredient.html" data-nav>
+              <span class="row-main"><span class="row-title is-strong">Overnight oats</span><span class="row-sub">Breakfast &middot; 420 kcal</span></span>
+              <span class="meal-chip breakfast">Breakfast</span>
+              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+            <a class="row is-tappable" href="/app/client/plan/ingredient.html" data-nav>
+              <span class="row-main"><span class="row-title is-strong">Chicken bowl</span><span class="row-sub">Lunch &middot; 610 kcal</span></span>
+              <span class="meal-chip lunch">Lunch</span>
+              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="list-group">
+          <div class="list-header">Add a meal</div>
+          <div class="list">
+            <div class="field-row">
+              <label for="meal-name">Name</label>
+              <input class="field-input" id="meal-name" placeholder="e.g. Chicken bowl" />
+            </div>
+            <div class="field-row">
+              <label for="meal-type">Type</label>
+              <select class="field-select" id="meal-type">
+                <option>Breakfast</option>
+                <option>Lunch</option>
+                <option>Dinner</option>
+                <option>Snack</option>
+              </select>
+            </div>
+            <button class="row is-tappable" id="from-saved" type="button">
+              <span class="row-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 10.5 2 2L15.5 8M19 21V7.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C16.72 3 15.88 3 14.2 3H9.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C5 5.28 5 6.12 5 7.8V21l7-4 7 4Z"/></svg>
+              </span>
+              <span class="row-main"><span class="row-title">Add from saved meals</span></span>
+              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <div class="action-bar">
+        <div class="action-bar-inner">
+          <button class="btn btn-gradient btn-block" id="save-meal">Add Meal &amp; Ingredients</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireAuth } from "/app/assets/js/auth.js";
+      import { bindNavLinks } from "/app/assets/js/router.js";
+
+      await requireAuth("client");
+      bindNavLinks();
+
+      const day = new URLSearchParams(window.location.search).get("day") || "mon";
+      const dayMap = { mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" };
+      const name = dayMap[day] || "Monday";
+      document.querySelector("#day-title").textContent = name;
+      document.querySelector("#nav-title").textContent = name;
+
+      function goToIngredients() {
+        const mealName = document.querySelector("#meal-name").value.trim();
+        if (mealName) localStorage.setItem("demo.lastMealName", mealName);
+        window.location.assign("/app/client/plan/ingredient.html");
+      }
+
+      document.querySelector("#save-meal").addEventListener("click", goToIngredients);
+      document.querySelector("#from-saved").addEventListener("click", goToIngredients);
+    </script>
+  </body>
+</html>

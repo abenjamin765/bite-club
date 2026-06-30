@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coach-Led Meal Planning MVP - Mobile Wireframe</title>
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <link rel="stylesheet" href="styles/doc.css" />
+</head>
+<body>
+  <h1>Coach-Led Meal Planning MVP - Mobile Wireframe</h1>
+  <p class="muted">Mobile-only MVP wireframe set. Primary client screen switches by weekly plan status: approved → Food Log hub; not approved → Planning hub.</p>
+
+  <h2>Screen Flow Map</h2>
+  <div class="flow-map">
+    <strong>Client (S1–S3, S6):</strong>
+    <ol>
+      <li>Auth → Plan hub (draft) → Day/meal editor → Submit plan → Awaiting approval (locked)</li>
+      <li>Plan approved → Food Log hub → Mark meals (Unselected → Followed/Modified/Skipped) → Submit check-in → Confirmation</li>
+      <li>Reuse: Plan hub → Add from saved → Meal copied into day</li>
+    </ol>
+    <strong>Coach (S4–S5):</strong>
+    <ol>
+      <li>Auth → Group dashboard → Review submitted plan → Approve</li>
+      <li>Digest notification → Daily digest → Client check-in detail (planned vs actual)</li>
+    </ol>
+  </div>
+
+  <h2>Shared — Auth</h2>
+  <div class="annotation">layer: page | object: account | component-hint: auth form | ui-rule: INPUT_LABELED_FIELDS,ACT_PRIMARY</div>
+  <div class="screen-grid">
+    <section class="phone" aria-label="Sign up or log in">
+      <div class="statusbar"><span>9:41</span><span>Signal/WiFi/Battery</span></div>
+      <div class="shell">
+        <div class="topbar">
+          <span class="chip" style="visibility:hidden">—</span>
+          <div class="header-id">
+            <div class="mode-label">Meal Plan</div>
+          </div>
+          <span class="chip" style="visibility:hidden">—</span>
+        </div>
+        <section class="plan-sheet">
+          <div class="plan-title">Welcome</div>
+          <p class="muted">Sign up or log in to join your coach's group.</p>
+          <div class="field-block">
+            <label for="email">Email</label>
+            <input id="email" type="email" value="client@example.com" />
+          </div>
+          <div class="field-block">
+            <label for="password">Password</label>
+            <input id="password" type="password" value="••••••••" />
+          </div>
+          <button class="plan-primary" type="button">Log in</button>
+          <button type="button" style="min-height:44px;border-radius:12px;border:1px solid rgba(0,0,0,0.12);background:#fff;font-weight:700">Create account</button>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <h2>Client App Shell (mobile-only)</h2>
+  <div class="annotation">layer: page | object: account | component-hint: top app nav | ui-rule: NAV_PRIMARY,ORG_SHOW_ESSENTIAL</div>
+  <div class="notes">
+    Navigation contract: left chip = profile/group context, center = <strong>mode label</strong> (Food Log / Plan) with the <strong>active week date range</strong> beneath it (e.g. Jun 28 – Jul 06), right chip = toggle Plan vs Food Log.
+    The mode label names the current screen; the week range is context, not identity. Day-of-week selector sits below and scrolls horizontally across all 7 days (inactive days meet 4.5:1 contrast).
+    When the week is not approved, Food Log is locked and Plan mode is primary (right chip still available where applicable).
+  </div>
+
+  <h2>State A - Week Approved (Food Log is central)</h2>
+  <div class="annotation">layer: page | object: daily-check-in | component-hint: card-stack + sticky CTA | ui-rule: DISPLAY_RICH_BROWSABLE_OBJECTS,ACT_PRIMARY,AGENT_STATE_ALL_STATES</div>
+  <div class="screen-grid">
+    <section class="phone has-submit" aria-label="Food Log primary screen">
+      <p class="screen-caption">Default day — meals start unselected; no status is pre-answered (A-008)</p>
+      <div class="statusbar">
+        <span>9:41</span>
+        <span>Signal/WiFi/Battery</span>
+      </div>
+      <div class="shell">
+        <div class="topbar">
+          <button class="chip" aria-label="Open profile and group context">Profile</button>
+          <div class="header-id">
+            <div class="mode-label">Food Log</div>
+            <div class="app-name">Jun 28 – Jul 06</div>
+          </div>
+          <button class="chip" aria-label="Switch to weekly planning screen">Plan</button>
+        </div>
+
+        <!-- layer: collection | object: day-plan | component-hint: tabs | ui-rule: ORG_TABS_PEER_PANELS -->
+        <div class="weekday-row" aria-label="Weekday tabs">
+          <span class="active">Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+        <!-- layer: instance | object: daily-check-in | component-hint: bulk action | ui-rule: ACT_SECONDARY,SELECT_BULK_APPLY -->
+        <button class="fast-path" type="button" aria-label="Mark all meals as followed">Mark all followed</button>
+        <!-- layer: instance | object: meal | component-hint: meal card | ui-rule: DISPLAY_RICH_BROWSABLE_OBJECTS -->
+        <div class="content-stack">
+          <article class="meal-card">
+            <div class="meal-type">Breakfast</div>
+            <div class="meal-name">Overnight Oats</div>
+            <div class="macro-caption">Planned</div>
+            <div class="macro-grid" aria-label="Planned meal macros">
+              <div class="macro-tile"><div class="macro-val">35g</div><div class="macro-label">Protein</div></div>
+              <div class="macro-tile"><div class="macro-val">18g</div><div class="macro-label">Carbs</div></div>
+              <div class="macro-tile"><div class="macro-val">10g</div><div class="macro-label">Fat</div></div>
+            </div>
+
+            <!-- layer: instance | object: meal-adherence-record | component-hint: segmented control (radio group) | ui-rule: SELECT_SINGLE_2_TO_5,A11Y_NO_COLOR_ONLY -->
+            <div class="segment" role="radiogroup" aria-label="Breakfast adherence status">
+              <button type="button" role="radio" aria-checked="false">Followed</button>
+              <button type="button" role="radio" aria-checked="false">Modified</button>
+              <button type="button" role="radio" aria-checked="false">Skipped</button>
+            </div>
+            <!-- layer: relationship | object: meal->ingredient | component-hint: outbound link | ui-rule: NAV_RELATED_OBJECT -->
+            <button class="ingredients-link" type="button" aria-label="View planned ingredients for Overnight Oats">View planned ingredients</button>
+          </article>
+
+          <article class="meal-card">
+            <div class="meal-type">Lunch</div>
+            <div class="meal-name">Chicken &amp; Rice</div>
+            <div class="macro-caption">Planned</div>
+            <div class="macro-grid" aria-label="Planned meal macros">
+              <div class="macro-tile"><div class="macro-val">48g</div><div class="macro-label">Protein</div></div>
+              <div class="macro-tile"><div class="macro-val">20g</div><div class="macro-label">Carbs</div></div>
+              <div class="macro-tile"><div class="macro-val">4g</div><div class="macro-label">Fat</div></div>
+            </div>
+            <div class="segment" role="radiogroup" aria-label="Lunch adherence status">
+              <button type="button" role="radio" aria-checked="false">Followed</button>
+              <button type="button" role="radio" aria-checked="false">Modified</button>
+              <button type="button" role="radio" aria-checked="false">Skipped</button>
+            </div>
+            <button class="ingredients-link" type="button" aria-label="View planned ingredients for Chicken and Rice">View planned ingredients</button>
+          </article>
+        </div>
+      </div>
+      <button class="sticky-submit disabled" aria-disabled="true" aria-label="Submit daily check-in (disabled until all meals marked)">Submit check-in</button>
+    </section>
+
+    <section class="phone has-submit" aria-label="Food Log modified meal state">
+      <div class="statusbar">
+        <span>9:41</span>
+        <span>Signal/WiFi/Battery</span>
+      </div>
+      <div class="shell">
+        <div class="topbar">
+          <button class="chip" aria-label="Open profile and group context">Profile</button>
+          <div class="header-id">
+            <div class="mode-label">Food Log</div>
+            <div class="app-name">Jun 28 – Jul 06</div>
+          </div>
+          <button class="chip" aria-label="Switch to weekly planning screen">Plan</button>
+        </div>
+        <div class="weekday-row">
+          <span class="active">Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+        <!-- layer: instance | object: meal-adherence-record | component-hint: expandable detail card | ui-rule: ORG_DISCLOSE_SUPPLEMENTAL,INPUT_LABELED_FIELDS -->
+        <article class="meal-card">
+          <div class="meal-type">Breakfast</div>
+          <div class="meal-name">Overnight Oats</div>
+          <div class="macro-caption">Planned</div>
+          <div class="macro-grid" aria-label="Planned meal macros">
+            <div class="macro-tile"><div class="macro-val">35g</div><div class="macro-label">Protein</div></div>
+            <div class="macro-tile"><div class="macro-val">18g</div><div class="macro-label">Carbs</div></div>
+            <div class="macro-tile"><div class="macro-val">10g</div><div class="macro-label">Fat</div></div>
+          </div>
+          <div class="segment" role="radiogroup" aria-label="Breakfast adherence status">
+            <button type="button" role="radio" aria-checked="false">Followed</button>
+            <button type="button" class="selected" role="radio" aria-checked="true">Modified</button>
+            <button type="button" role="radio" aria-checked="false">Skipped</button>
+          </div>
+
+          <div class="mod-panel">
+            <div class="macro-caption">Actual change (delta)</div>
+            <div class="mod-head">
+              <div class="mod-title">Added strawberries (1/2 cup)</div>
+              <button class="round-icon" aria-label="Remove strawberries modification">−</button>
+            </div>
+            <div class="mod-grid" aria-label="Macro delta">
+              <div>Protein</div><div>--</div>
+              <div>Carbs</div><div>+5g</div>
+              <div>Fat</div><div>--</div>
+            </div>
+            <button class="mod-cta" type="button" style="width:100%;min-height:44px;border:1px solid rgba(0,0,0,0.12);border-radius:12px;background:#fff;cursor:pointer">Add modification</button>
+          </div>
+        </article>
+      </div>
+      <button class="sticky-submit" aria-label="Submit daily check-in">Submit check-in</button>
+    </section>
+
+    <section class="phone has-submit" aria-label="Food Log skipped meal state">
+      <p class="screen-caption">Skipped — optional reason captured (matches coach detail, SC-6)</p>
+      <div class="statusbar"><span>9:41</span><span>Signal/WiFi/Battery</span></div>
+      <div class="shell">
+        <div class="topbar">
+          <button class="chip" aria-label="Open profile and group context">Profile</button>
+          <div class="header-id">
+            <div class="mode-label">Food Log</div>
+            <div class="app-name">Jun 28 – Jul 06</div>
+          </div>
+          <button class="chip" aria-label="Switch to weekly planning screen">Plan</button>
+        </div>
+        <div class="weekday-row"><span class="active">Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+        <!-- layer: instance | object: meal-adherence-record | component-hint: status + optional reason | ui-rule: ORG_DISCLOSE_SUPPLEMENTAL,INPUT_LABELED_FIELDS -->
+        <article class="meal-card">
+          <div class="meal-type">Lunch</div>
+          <div class="meal-name">Chicken &amp; Rice</div>
+          <div class="macro-caption">Planned</div>
+          <div class="macro-grid" aria-label="Planned meal macros">
+            <div class="macro-tile"><div class="macro-val">48g</div><div class="macro-label">Protein</div></div>
+            <div class="macro-tile"><div class="macro-val">20g</div><div class="macro-label">Carbs</div></div>
+            <div class="macro-tile"><div class="macro-val">4g</div><div class="macro-label">Fat</div></div>
+          </div>
+          <div class="segment" role="radiogroup" aria-label="Lunch adherence status">
+            <button type="button" role="radio" aria-checked="false">Followed</button>
+            <button type="button" role="radio" aria-checked="false">Modified</button>
+            <button type="button" class="selected" role="radio" aria-checked="true">Skipped</button>
+          </div>
+          <div class="reason-field">
+            <label for="skip-reason">Reason (optional)</label>
+            <input id="skip-reason" type="text" value="Not hungry at lunch" />
+          </div>
+        </article>
+      </div>
+      <button class="sticky-submit" aria-label="Submit daily check-in">Submit check-in</button>
+    </section>
+
+    <section class="phone has-submit" aria-label="Food Log completed check-in ready to submit">
+      <p class="screen-caption">After "Mark all followed" — every meal Followed, ready to submit (SC-1)</p>
+      <div class="statusbar"><span>9:41</span><span>Signal/WiFi/Battery</span></div>
+      <div class="shell">
+        <div class="topbar">
+          <button class="chip" aria-label="Open profile and group context">Profile</button>
+          <div class="header-id">
+            <div class="mode-label">Food Log</div>
+            <div class="app-name">Jun 28 – Jul 06</div>
+          </div>
+          <button class="chip" aria-label="Switch to weekly planning screen">Plan</button>
+        </div>
+        <div class="weekday-row"><span class="active">Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+        <div class="banner-inline">All meals followed — ready to submit.</div>
+        <div class="content-stack">
+          <article class="meal-card">
+            <div class="meal-type">Breakfast</div>
+            <div class="meal-name">Overnight Oats</div>
+            <div class="macro-caption">Planned</div>
+            <div class="macro-grid" aria-label="Planned meal macros">
+              <div class="macro-tile"><div class="macro-val">35g</div><div class="macro-label">Protein</div></div>
+              <div class="macro-tile"><div class="macro-val">18g</div><div class="macro-label">Carbs</div></div>
+              <div class="macro-tile"><div class="macro-val">10g</div><div class="macro-label">Fat</div></div>
+            </div>
+            <div class="segment" role="radiogroup" aria-label="Breakfast adherence status">
+              <button type="button" class="selected" role="radio" aria-checked="true">Followed</button>
+              <button type="button" role="radio" aria-checked="false">Modified</button>
+              <button type="button" role="radio" aria-checked="false">Skipped</button>
+            </div>
+          </article>
+          <article class="meal-card">
+            <div class="meal-type">Lunch</div>
+            <div class="meal-name">Chicken &amp; Rice</div>
+            <div class="macro-caption">Planned</div>
+            <div class="macro-grid" aria-label="Planned meal macros">
+              <div class="macro-tile"><div class="macro-val">48g</div><div class="macro-label">Protein</div></div>
+              <div class="macro-tile"><div class="macro-val">20g</div><div class="macro-label">Carbs</div></div>
+              <div class="macro-tile"><div class="macro-val">4g</div><div class="macro-label">Fat</div></div>
+            </div>
+            <div class="segment" role="radiogroup" aria-label="Lunch adherence status">
+              <button type="button" class="selected" role="radio" aria-checked="true">Followed</button>
+              <button type="button" role="radio" aria-checked="false">Modified</button>
+              <button type="button" role="radio" aria-checked="false">Skipped</button>
+            </div>
+          </article>
+        </div>
+      </div>
+      <button class="sticky-submit" aria-label="Submit daily check-in">Submit check-in</button>
+    </section>
+
+    <section class="phone" aria-label="Check-in submitted confirmation">
+      <p class="screen-caption">Submitted — S2/S3 outcome (SC-1, SC-2)</p>
+      <div class="statusbar"><span>9:41</span><span>Signal/WiFi/Battery</span></div>
+      <div class="shell">
+        <div class="topbar">
+          <button class="chip" aria-label="Open profile and group context">Profile</button>
+          <div class="header-id">
+            <div class="mode-label">Food Log</div>
+            <div class="app-name">Jun 28 – Jul 06</div>
+          </div>
+          <button class="chip" aria-label="Switch to weekly planning screen">Plan</button>
+        </div>
+        <section class="confirm-sheet">
+          <div class="confirm-title">Check-in submitted</div>
+          <p class="confirm-meta">Monday, June 29 · 3 meals marked</p>
+          <p class="confirm-meta">Your coach will see this in tonight's digest.</p>
+          <button class="plan-primary" type="button">Back to Food Log</button>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <h2>Meal Card State Matrix (all adherence states)</h2>
+  <div class="annotation">layer: instance | object: meal-adherence-record | component-hint: state gallery | ui-rule: SELECT_SINGLE_2_TO_5,A11Y_NO_COLOR_ONLY,AGENT_STATE_ALL_STATES</div>
+  <div class="state-matrix">
+    <section>
+      <div class="state-label">Unselected (default)</div>
+      <article class="mini-card">
+        <div class="mini-title">Breakfast</div>
+        <div class="mini-name">Overnight Oats</div>
+        <div class="mini-macros">
+          <div class="mini-macro"><div class="value">35g</div><div class="label">Protein</div></div>
+          <div class="mini-macro"><div class="value">18g</div><div class="label">Carbs</div></div>
+          <div class="mini-macro"><div class="value">10g</div><div class="label">Fat</div></div>
+        </div>
+        <div class="mini-segment" aria-label="unselected state">
+          <span>Followed</span><span>Modified</span><span>Skipped</span>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <div class="state-label">Followed</div>
+      <article class="mini-card">
+        <div class="mini-title">Breakfast</div>
+        <div class="mini-name">Overnight Oats</div>
+        <div class="mini-macros">
+          <div class="mini-macro"><div class="value">35g</div><div class="label">Protein</div></div>
+          <div class="mini-macro"><div class="value">18g</div><div class="label">Carbs</div></div>
+          <div class="mini-macro"><div class="value">10g</div><div class="label">Fat</div></div>
+        </div>
+        <div class="mini-segment" aria-label="followed selected">
+          <span class="selected">Followed</span><span>Modified</span><span>Skipped</span>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <div class="state-label">Modified</div>
+      <article class="mini-card">
+        <div class="mini-title">Breakfast</div>
+        <div class="mini-name">Overnight Oats</div>
+        <div class="mini-macros">
+          <div class="mini-macro"><div class="value">35g</div><div class="label">Protein</div></div>
+          <div class="mini-macro"><div class="value">18g</div><div class="label">Carbs</div></div>
+          <div class="mini-macro"><div class="value">10g</div><div class="label">Fat</div></div>
+        </div>
+        <div class="mini-segment" aria-label="modified selected">
+          <span>Followed</span><span class="selected">Modified</span><span>Skipped</span>
+        </div>
+        <div class="mini-mod-panel">
+          Added strawberries (1/2 cup)<br />
+          Protein -- &nbsp; Carbs +5g &nbsp; Fat --
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <div class="state-label">Skipped</div>
+      <article class="mini-card">
+        <div class="mini-title">Breakfast</div>
+        <div class="mini-name">Overnight Oats</div>
+        <div class="mini-macros">
+          <div class="mini-macro"><div class="value">35g</div><div class="label">Protein</div></div>
+          <div class="mini-macro"><div class="value">18g</div><div class="label">Carbs</div></div>
+          <div class="mini-macro"><div class="value">10g</div><div class="label">Fat</div></div>
+        </div>
+        <div class="mini-segment" aria-label="skipped selected">
+          <span>Followed</span><span>Modified</span><span class="selected">Skipped</span>
+        </div>
+        <div class="mini-mod-panel">
+          Reason (optional): "Not hungry at lunch"
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <h2>State B - Week Not Planned / Not Approved (Planning is central)</h2>
+  <div class="annotation">layer: page | object: weekly-meal-plan | component-hint: guided step flow | ui-rule: ORG_SEQUENTIAL_REQUIRED,ACT_PRIMARY</div>
+  <div class="screen-grid">
+    <section class="phone" aria-label="Planning primary screen">
+      <div class="statusbar">
+        <span>9:41</span>
+        <span>Signal/WiFi/Battery</span>
+      </div>
+      <div class="shell">
+        <div class="topbar">
+          <button class="chip" aria-label="Open profile and group context">Profile</button>
+          <div class="header-id">
+            <div class="mode-label">Plan</div>
+            <div class="app-name">Jun 28 – Jul 06</div>
+          </div>
+          <button class="chip" aria-label="Open Food Log screen">Food Log</button>
+        </div>
+        <div class="weekday-row">
+          <span class="active">Plan Week</span><span>Review</span>
+        </div>
+
+        <section class="plan-sheet">
+          <div class="plan-title">Build Week Plan</div>
+          <p class="muted">Your week is not approved yet. Complete planning to unlock Food Log check-ins.</p>
+
+          <!-- layer: collection | object: day-plan | component-hint: stepper + list | ui-rule: DISPLAY_SIMPLE_SEQUENCE -->
+          <div class="plan-stepper">
+            <div class="plan-step active">1 Pick day</div>
+            <div class="plan-step">2 Add meal</div>
+            <div class="plan-step">3 Ingredients</div>
+            <div class="plan-step">4 Totals</div>
+            <div class="plan-step">5 Submit</div>
+          </div>
+
+          <!-- layer: collection | object: saved-meal | component-hint: secondary actions | ui-rule: ACT_SECONDARY -->
+          <div class="plan-actions">
+            <button type="button">Copy last week</button>
+            <button type="button">Add from saved</button>
+          </div>
+
+          <div class="day-list" aria-label="Day plan checklist">
+            <div class="day-row">
+              <div>
+                <div class="day-name">Monday</div>
+                <div class="day-meta">2 meals added</div>
+              </div>
+              <span class="tag">In progress</span>
+            </div>
+            <div class="day-row">
+              <div>
+                <div class="day-name">Tuesday</div>
+                <div class="day-meta">No meals yet</div>
+              </div>
+              <span class="tag">Start</span>
+            </div>
+            <div class="day-row">
+              <div>
+                <div class="day-name">Wednesday</div>
+                <div class="day-meta">No meals yet</div>
+              </div>
+              <span class="tag">Start</span>
+            </div>
+          </div>
+
+          <button class="plan-primary" type="button">Submit plan for approval</button>
+        </section>
+      </div>
+    </section>
+
+    <section class="phone" aria-label="Day meal editor">
+      <p class="screen-caption">S1 step 4–7 — Add meal + ingredients (S6 reuse entry)</p>
+      <div class="statusbar"><span>9:41</span><span>Signal/WiFi/Battery</span></div>
+      <div class="shell">
+        <div class="topbar">
+          <button class="chip" aria-label="Open profile and group context">Profile</button>
+          <div class="header-id">
+            <div class="mode-label">Plan</div>
+            <div class="app-name">Jun 28 – Jul 06</div>
+          </div>
+          <button class="chip" aria-label="Open Food Log screen">Food Log</button>
+        </div>
+        <div class="weekday-row"><span class="active">Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+        <section class="plan-sheet">
+          <div class="plan-title">Monday — Add meal</div>
+          <div class="field-block">
+            <label for="meal-name">Meal name</label>
+            <input id="meal-name" type="text" value="Overnight oats" />
+          </div>
+          <div class="field-block">
+            <label for="meal-type">Meal type</label>
+            <input id="meal-type" type="text" value="Breakfast" />
+          </div>
+          <div class="day-list" aria-label="Ingredients">
+            <div class="day-row"><div><div class="day-name">Rolled oats</div><div class="day-meta">1/2 cup · 27g carbs</div></div></div>
+            <div class="day-row"><div><div class="day-name">Greek yogurt</div><div class="day-meta">1/2 cup · 12g protein</div></div></div>
+          </div>
+          <div class="plan-actions">
+            <button type="button">Add ingredient</button>
+            <button type="button">Add from saved</button>
+          </div>
+          <button class="plan-primary" type="button">Save meal to Monday</button>
+        </section>
+      </div>
+    </section>
+
+    <section class="phone" aria-label="Plan submitted awaiting approval">
+      <p class="screen-caption">S1 step 10 — Submitted, locked until coach approves</p>
+      <div class="statusbar"><span>9:41</span><span>Signal/WiFi/Battery</span></div>
+      <div class="shell">
+        <div class="topbar">
+          <button class="chip" aria-label="Open profile and group context">Profile</button>
+          <div class="header-id">
+            <div class="mode-label">Plan</div>
+            <div class="app-name">Jun 28 – Jul 06</div>
+          </div>
+          <button class="chip" aria-label="Open Food Log screen">Food Log</button>
+        </div>
+        <section class="plan-sheet">
+          <div class="plan-title">Week of June 29</div>
+          <div class="banner-inline" style="background:#fff;color:var(--text);border-color:rgba(0,0,0,0.1)">Awaiting coach approval — plan is read-only.</div>
+          <div class="day-list">
+            <div class="day-row"><div><div class="day-name">Monday</div><div class="day-meta">3 meals · 1,850 cal</div></div><span class="tag neutral">Locked</span></div>
+            <div class="day-row"><div><div class="day-name">Tuesday</div><div class="day-meta">3 meals · 1,920 cal</div></div><span class="tag neutral">Locked</span></div>
+          </div>
+          <p class="muted">Food Log unlocks after approval.</p>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <h2>Coach — Group Dashboard + Daily Digest</h2>
+  <div class="annotation">layer: page | object: group | component-hint: digest dashboard | ui-rule: DISPLAY_COMPARABLE_RECORDS,COLLECTION_SORT,COLLECTION_FILTER</div>
+  <div class="screen-grid">
+    <section class="phone" aria-label="Coach group dashboard">
+      <p class="screen-caption">S4 step 2, S5 step 2 — exception-sorted roster (SC-3)</p>
+      <div class="statusbar"><span>9:41</span><span>Signal/WiFi/Battery</span></div>
+      <div class="shell">
+        <div class="topbar">
+          <button class="chip" aria-label="Coach profile">Profile</button>
+          <div class="header-id"><div class="mode-label">Group</div></div>
+          <button class="chip" aria-label="Invite client">Invite</button>
+        </div>
+        <section class="plan-sheet">
+          <div class="plan-title">Group A</div>
+          <div class="digest-summary" aria-label="Today's digest counts">
+            <div class="digest-stat"><div class="num">8</div><div class="lbl">Submitted</div></div>
+            <div class="digest-stat"><div class="num">2</div><div class="lbl">Missed</div></div>
+            <div class="digest-stat"><div class="num">3</div><div class="lbl">Modified</div></div>
+          </div>
+          <p class="muted"><strong>Sort:</strong> Attention needed (default), Name · <strong>Filter:</strong> Plan status, Check-in status</p>
+          <div class="day-list" aria-label="Client roster">
+            <div class="coach-row">
+              <div class="left"><div class="name">Alex</div><div class="meta">Check-in missed today</div></div>
+              <span class="tag warn">Missed</span>
+            </div>
+            <div class="coach-row">
+              <div class="left"><div class="name">Mina</div><div class="meta">Modified dinner</div></div>
+              <span class="tag warn">Modified</span>
+            </div>
+            <div class="coach-row">
+              <div class="left"><div class="name">Sarah</div><div class="meta">All followed · submitted 8:12 PM</div></div>
+              <span class="tag ok">Submitted</span>
+            </div>
+            <div class="coach-row">
+              <div class="left"><div class="name">Jordan</div><div class="meta">Plan submitted — review needed</div></div>
+              <span class="tag neutral">Plan queue</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <h2>Coach — Plan Review</h2>
+  <div class="annotation">layer: instance | object: weekly-meal-plan | component-hint: read-only review + approve | ui-rule: ACTION_DESTRUCTIVE_IRREVERSIBLE,ORG_SHOW_ESSENTIAL</div>
+  <div class="screen-grid">
+    <section class="phone" aria-label="Coach plan review">
+      <p class="screen-caption">S4 step 3–5 — Approve plan (SC-4)</p>
+      <div class="statusbar"><span>9:41</span><span>Signal/WiFi/Battery</span></div>
+      <div class="shell">
+        <div class="topbar">
+          <button class="chip" aria-label="Back to group">Group</button>
+          <div class="header-id"><div class="mode-label">Review Plan</div></div>
+          <span class="chip" style="visibility:hidden">—</span>
+        </div>
+        <section class="plan-sheet">
+          <div class="plan-title">Jordan · Week of June 29</div>
+          <p class="muted">14,250 cal · Protein 910g · Carbs 1,190g · Fat 380g</p>
+          <div class="day-list">
+            <div class="day-row"><div><div class="day-name">Monday</div><div class="day-meta">Breakfast, Lunch, Dinner</div></div></div>
+            <div class="day-row"><div><div class="day-name">Tuesday</div><div class="day-meta">Breakfast, Lunch, Dinner</div></div></div>
+          </div>
+          <p class="muted">Coach feedback outside app in MVP — no in-app comments.</p>
+          <div class="plan-actions">
+            <button type="button">Request changes</button>
+            <button type="button" style="background:#2d4a5c;color:#fff;border-color:#2d4a5c">Approve plan</button>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <h2>Coach — Client Check-In Detail</h2>
+  <div class="annotation">layer: instance | object: daily-check-in | component-hint: planned vs actual read-only | ui-rule: DISPLAY_COMPARABLE_RECORDS,ORG_SHOW_ESSENTIAL</div>
+  <div class="screen-grid">
+    <section class="phone" aria-label="Coach client check-in detail">
+      <p class="screen-caption">S5 step 4–5 — Planned meal preserved, delta visible (SC-6)</p>
+      <div class="statusbar"><span>9:41</span><span>Signal/WiFi/Battery</span></div>
+      <div class="shell">
+        <div class="topbar">
+          <button class="chip" aria-label="Back to digest">Digest</button>
+          <div class="header-id">
+            <div class="mode-label">Check-In</div>
+            <div class="app-name">Mina · Today</div>
+          </div>
+          <span class="chip" style="visibility:hidden">—</span>
+        </div>
+        <section class="plan-sheet">
+          <div class="plan-title">Monday check-in</div>
+          <p class="muted">Submitted 8:04 PM · 1 modified, 1 skipped</p>
+          <div class="read-only-meal">
+            <strong>Breakfast — Overnight Oats</strong><br />Followed
+          </div>
+          <div class="read-only-meal">
+            <strong>Lunch — Chicken &amp; Rice</strong><br />
+            <span class="delta">Skipped · "Not hungry at lunch"</span>
+          </div>
+          <div class="read-only-meal">
+            <strong>Dinner — Salmon bowl</strong><br />
+            <span class="delta">Modified · Ingredient swap: salmon instead of chicken</span>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <h2>Edge States (mobile key surfaces)</h2>
+  <div class="annotation">layer: page | component-hint: edge-state gallery | ui-rule: AGENT_STATE_ALL_STATES</div>
+  <div class="edge-grid">
+    <div class="edge-card">
+      <h4>Food Log — empty</h4>
+      No approved week yet. "Go to Plan" primary CTA; meal cards locked.
+    </div>
+    <div class="edge-card">
+      <h4>Food Log — loading</h4>
+      Skeleton meal cards; submit disabled.
+    </div>
+    <div class="edge-card">
+      <h4>Food Log — error</h4>
+      "Could not load today's meals" + Retry. Preserve local selections.
+    </div>
+    <div class="edge-card">
+      <h4>Food Log — permission</h4>
+      Cannot view another client's check-in.
+    </div>
+    <div class="edge-card">
+      <h4>Food Log — at scale</h4>
+      &gt;10 meals: collapse by type; sticky submit remains visible.
+    </div>
+  </div>
+  <div class="edge-grid" style="margin-top:8px">
+    <div class="edge-card">
+      <h4>Plan Wizard — empty</h4>
+      No meals for [day]. "Add meal" primary CTA.
+    </div>
+    <div class="edge-card">
+      <h4>Plan Wizard — loading</h4>
+      Skeleton saved-meals list.
+    </div>
+    <div class="edge-card">
+      <h4>Plan Wizard — error</h4>
+      Save failed; draft saved locally + Sync now.
+    </div>
+    <div class="edge-card">
+      <h4>Plan Wizard — locked</h4>
+      Submitted/approved: read-only with status banner.
+    </div>
+    <div class="edge-card">
+      <h4>Plan Wizard — at scale</h4>
+      Saved meal picker: search + pagination at 100+ items.
+    </div>
+  </div>
+  <div class="edge-grid" style="margin-top:8px">
+    <div class="edge-card">
+      <h4>Coach Dashboard — empty</h4>
+      No clients yet. "Invite client" primary CTA.
+    </div>
+    <div class="edge-card">
+      <h4>Coach Dashboard — loading</h4>
+      Skeleton digest counts + client rows.
+    </div>
+    <div class="edge-card">
+      <h4>Coach Dashboard — error</h4>
+      Digest unavailable; show last successful snapshot.
+    </div>
+    <div class="edge-card">
+      <h4>Coach Dashboard — permission</h4>
+      Coach-only dashboard; role required message.
+    </div>
+    <div class="edge-card">
+      <h4>Coach Dashboard — at scale</h4>
+      100+ clients: sortable table + server pagination.
+    </div>
+  </div>
+  <div class="edge-grid" style="margin-top:8px">
+    <div class="edge-card">
+      <h4>Coach Plan Review — empty</h4>
+      No submitted plans in queue.
+    </div>
+    <div class="edge-card">
+      <h4>Coach Plan Review — loading</h4>
+      Skeleton day/meal rows.
+    </div>
+    <div class="edge-card">
+      <h4>Coach Plan Review — error</h4>
+      Could not load plan detail + Retry.
+    </div>
+    <div class="edge-card">
+      <h4>Coach Plan Review — permission</h4>
+      Restrict to own group's clients only.
+    </div>
+    <div class="edge-card">
+      <h4>Coach Plan Review — at scale</h4>
+      Long plans: collapsible day sections + sticky macro summary.
+    </div>
+  </div>
+  <div class="edge-grid" style="margin-top:8px">
+    <div class="edge-card">
+      <h4>Auth — error</h4>
+      Invalid credentials; specific message + retry.
+    </div>
+  </div>
+
+  <h2>Goal-Page Map (SC-1 to SC-6)</h2>
+  <ul class="checks">
+    <li><strong>SC-1:</strong> Food Log meal cards + sticky submit — "Mark all followed" completes the happy path in 1 tap + submit; deviations marked per meal.</li>
+    <li><strong>SC-2:</strong> Food Log hub on approved week; check-in submitted confirmation.</li>
+    <li><strong>SC-3:</strong> Coach Group dashboard digest summary — one daily view, exception-sorted.</li>
+    <li><strong>SC-4:</strong> Full loop screens present: Plan → Submit → Approve → Food Log → Digest.</li>
+    <li><strong>SC-5:</strong> No peer data on client surfaces; coach-only group views.</li>
+    <li><strong>SC-6:</strong> Modified/Skipped inline on client; planned vs actual on coach check-in detail.</li>
+  </ul>
+
+  <h2>P7 Checklist Snapshot</h2>
+  <ul class="checks">
+    <li>Mobile-first layouts only; current orange/cream styling preserved.</li>
+    <li>Primary screen contract: approved week → Food Log; unapproved → Plan.</li>
+    <li>Header shows mode label (Food Log / Plan) + week-range context; auth shows product name, no phantom week.</li>
+    <li>No pre-answered adherence: meals start Unselected; submit disabled until all marked; "Mark all followed" fast-path for the happy path.</li>
+    <li>Meal card matrix: Unselected, Followed, Modified, Skipped — Skipped and Modified both capture deltas the coach detail displays.</li>
+    <li>Macro tiles labeled "Planned"; actual/delta shown only on Modified.</li>
+    <li>Meal card links out to planned ingredients (no Isolated Object).</li>
+    <li>Weekday strip scrolls all 7 days; inactive-day text meets WCAG 1.4.3 (≥4.5:1).</li>
+    <li>Client flow screens: Auth, Plan draft, Day editor, Submitted locked, Food Log (default / modified / skipped / completed), Confirmation.</li>
+    <li>Coach flow screens: Group digest, Plan review, Client check-in detail.</li>
+    <li>Edge states rendered for Food Log, Plan Wizard, Coach Dashboard, Plan Review, Auth.</li>
+    <li>All interactive sections cite semantic ui-rule IDs; no ui-rule: TBD.</li>
+  </ul>
+</body>
+</html>
