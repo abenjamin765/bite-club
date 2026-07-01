@@ -128,7 +128,11 @@ body.app-auth {
 .app-brand img {
   width: 36px;
   height: 36px;
-  object-fit: contain;
+  border-radius: 10px;
+  object-fit: cover;
+  background:
+    radial-gradient(circle at 85% 16%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 35%),
+    var(--gradient-sunrise);
 }
 
 .app-nav {
@@ -450,6 +454,55 @@ button.row:active,
   color: var(--ios-label-tertiary);
 }
 
+/* Person avatar — consistent identity chip across list rows and headers. */
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--gradient-sunrise);
+  color: #fff;
+  font-family: var(--font-rounded);
+  font-weight: 720;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+.avatar--lg {
+  width: 48px;
+  height: 48px;
+  font-size: 18px;
+}
+
+/* Identity header for a single person's detail page. */
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 20px 12px;
+}
+
+.identity__body {
+  min-width: 0;
+}
+
+.identity__name {
+  font-family: var(--font-rounded);
+  font-size: 24px;
+  font-weight: 730;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--ios-label);
+}
+
+.identity__meta {
+  font-size: 14px;
+  color: var(--ios-label-secondary);
+  margin-top: 3px;
+}
+
 .icon-btn {
   appearance: none;
   border: 0;
@@ -577,6 +630,30 @@ button.row:active,
 .ring-inline .ring-center {
   color: var(--color-text);
   font-size: 12px;
+}
+
+/* Meal adherence card (daily check-in) */
+.mar-card {
+  padding: 16px;
+}
+
+.mar-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.mar-title {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mar-card .deviation .list {
+  box-shadow: none;
+  border: 0.5px solid var(--ios-separator);
 }
 
 /* ── Buttons ──────────────────────────────────────────── */
@@ -887,6 +964,23 @@ body.app[data-layout="board"] .tab-bar-inner {
   padding: 11px 16px;
 }
 
+/* Prominent invite-code entry — echoes the coach's invite-code display. */
+.code-input {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-family: var(--font-rounded);
+  font-size: 24px;
+  font-weight: 730;
+  color: var(--color-brand-950);
+  padding: 10px 0;
+}
+
+.code-input::placeholder {
+  color: var(--ios-label-tertiary);
+  letter-spacing: 0.18em;
+}
+
 .field-stack .field-input,
 .field-stack .field-textarea {
   padding-top: 4px;
@@ -1123,17 +1217,19 @@ body.app[data-layout="board"] .tab-bar-inner {
   border-radius: 20px;
   display: grid;
   place-items: center;
-  color: #fff;
-  background: #fff;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 85% 16%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 35%),
+    var(--gradient-sunrise);
   box-shadow:
     0 10px 22px var(--color-shadow-brand),
     0 1px 0 rgba(255, 255, 255, 0.6) inset;
 }
 
 .auth-logo img {
-  width: 58px;
-  height: 58px;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .auth-title {
@@ -1193,20 +1289,99 @@ body.app[data-layout="board"] .ios-scroll {
 .stack-12 { display: grid; gap: 12px; }
 .stack-8 { display: grid; gap: 8px; }
 
-/* ── Coach group card (My Groups) ────────────────────── */
+/* ── Coach group card (Group) ─────────────────────────── */
 
 .group-card {
   background: var(--ios-bg-elevated);
   border-radius: var(--ios-radius-surface);
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.6) inset,
-    0 3px 14px rgba(91, 55, 34, 0.06);
+    0 8px 24px rgba(91, 55, 34, 0.08);
 }
 
-.group-card__title {
+.group-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 18px 14px;
+}
+
+.group-card__name {
   margin: 0;
-  padding: 16px 16px 0;
+  font-family: var(--font-rounded);
+  font-size: 22px;
+  font-weight: 730;
+  letter-spacing: -0.01em;
+  color: var(--ios-label);
+}
+
+.group-card__count {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ios-label-secondary);
+  background: var(--ios-fill);
+  padding: 4px 11px;
+  border-radius: 999px;
+}
+
+/* Invite — a calm inset, not a full-bleed banner. */
+.invite-box {
+  margin: 0 14px 4px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--ios-tint) 8%, var(--color-brand-50));
+  border: 1px solid color-mix(in srgb, var(--ios-tint) 16%, transparent);
+}
+
+.invite-label {
+  font-size: 11px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-brand-900);
+}
+
+.invite-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.invite-code {
+  font-family: var(--font-rounded);
+  font-size: 27px;
+  font-weight: 760;
+  letter-spacing: 0.16em;
+  color: var(--color-brand-950);
+}
+
+.invite-copy {
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.invite-hint {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  color: var(--ios-label-secondary);
+}
+
+/* Members — clearly nested inside the group card. */
+.group-card__members {
+  margin-top: 12px;
+  border-top: 0.5px solid var(--ios-separator);
+}
+
+.members-head {
+  padding: 13px 18px 3px;
   font-size: 12px;
   font-weight: 640;
   letter-spacing: 0.04em;
@@ -1214,42 +1389,57 @@ body.app[data-layout="board"] .ios-scroll {
   color: var(--ios-label-secondary);
 }
 
-.group-card__invite {
-  margin: 12px 16px 0;
-  border-radius: 16px;
-  padding: 16px;
+.member-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 10px 18px;
+  text-decoration: none;
+  color: var(--ios-label);
+  cursor: pointer;
 }
 
-.group-card__section {
-  padding: 14px 16px 6px;
-  font-size: 12px;
-  font-weight: 640;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--ios-label-secondary);
+.member-row:active {
+  background: var(--ios-fill);
 }
 
-.group-card__members .row {
-  background: transparent;
+.member-row + .member-row::before {
+  content: "";
+  position: absolute;
+  left: 66px;
+  right: 0;
+  top: 0;
+  height: 0.5px;
+  background: var(--ios-separator);
 }
 
-.group-card__members .row:first-child {
-  padding-top: 4px;
+.member-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--gradient-sunrise);
+  color: #fff;
+  font-family: var(--font-rounded);
+  font-weight: 720;
+  font-size: 14px;
+  letter-spacing: 0;
 }
 
-.group-card__members .row:last-child {
-  padding-bottom: 14px;
+.member-row .row-main {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
 }
 
 .group-card__empty {
   margin: 0;
-  padding: 0 16px 16px;
+  padding: 4px 18px 18px;
   font-size: 13px;
   color: var(--ios-label-secondary);
-}
-
-@media (min-width: 1024px) {
-  body.app[data-layout="board"] .group-card {
-    break-inside: avoid;
-  }
 }

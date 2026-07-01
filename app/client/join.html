@@ -15,26 +15,29 @@
       <main class="auth-screen">
         <div class="auth-brand">
           <span class="auth-logo" aria-hidden="true">
-            <img src="/app/assets/brand-mark.svg" alt="" />
+            <img src="/app/assets/bc_icon.svg" alt="" />
           </span>
           <h1 class="auth-title">Join your coach's group</h1>
           <p class="auth-sub">Enter the invite code your coach gave you to get started.</p>
         </div>
 
         <form id="join-form" class="stack-12">
-          <div class="list">
-            <div class="field-row">
-              <label for="code">Invite code</label>
-              <input
-                class="field-input"
-                id="code"
-                name="code"
-                placeholder="e.g. 7KQ2MX"
-                autocomplete="off"
-                autocapitalize="characters"
-                spellcheck="false"
-                required
-              />
+          <div>
+            <div class="list-header">Invite code</div>
+            <div class="list">
+              <div class="field-stack">
+                <input
+                  class="field-input code-input"
+                  id="code"
+                  name="code"
+                  placeholder="ABC123"
+                  autocomplete="off"
+                  autocapitalize="characters"
+                  spellcheck="false"
+                  maxlength="6"
+                  required
+                />
+              </div>
             </div>
           </div>
           <button class="btn btn-filled btn-block" type="submit" id="join-action">Join Group</button>

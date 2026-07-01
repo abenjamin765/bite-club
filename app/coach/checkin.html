@@ -27,8 +27,13 @@
         </header>
 
         <main class="ios-scroll has-tabbar">
-          <h1 class="large-title" id="client-name">Check-In</h1>
-          <p class="large-title-sub" id="checkin-meta">Loading&hellip;</p>
+          <div class="identity">
+            <span class="avatar avatar--lg" id="client-avatar" aria-hidden="true"></span>
+            <div class="identity__body">
+              <div class="identity__name" id="client-name">Check-In</div>
+              <div class="identity__meta" id="checkin-meta">Loading&hellip;</div>
+            </div>
+          </div>
 
           <div id="meal-body"></div>
 
@@ -46,7 +51,7 @@
       import { mountAppShell } from "/app/assets/js/shell.js";
       import { bindNavLinks } from "/app/assets/js/router.js";
       import { getMyGroup, getGroupMembers, getCoachCheckinDetail } from "/app/assets/js/data.js";
-      import { formatKcal } from "/app/assets/js/utils.js";
+      import { formatKcal, initials } from "/app/assets/js/utils.js";
 
       const session = await requireAuth("coach");
       mountAppShell({ role: "coach", active: "dashboard", mobileTabs: true });
@@ -129,6 +134,7 @@
       const detail = await getCoachCheckinDetail(clientId);
       const clientName = detail.client?.name || "Client";
       document.querySelector("#client-name").textContent = clientName;
+      document.querySelector("#client-avatar").textContent = initials(clientName);
 
       if (!detail.plan) {
         document.querySelector("#checkin-meta").textContent = "No approved plan yet";

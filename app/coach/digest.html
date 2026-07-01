@@ -73,7 +73,7 @@
       import { mountAppShell } from "/app/assets/js/shell.js";
       import { bindNavLinks } from "/app/assets/js/router.js";
       import { getMyGroup, getDigest } from "/app/assets/js/data.js";
-      import { escapeHtml } from "/app/assets/js/utils.js";
+      import { escapeHtml, initials } from "/app/assets/js/utils.js";
 
       const session = await requireAuth("coach");
       mountAppShell({ role: "coach", active: "dashboard", mobileTabs: true });
@@ -85,15 +85,6 @@
         day: "numeric",
       }).format(new Date());
 
-      const ICONS = {
-        deviated:
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4m0 4h.01M10.615 3.892 2.39 18.098c-.456.788-.684 1.182-.65 1.506a1 1 0 0 0 .406.705c.263.191.718.191 1.629.191h16.45c.91 0 1.365 0 1.628-.191a1 1 0 0 0 .407-.705c.034-.324-.195-.718-.65-1.506L13.383 3.892c-.454-.785-.681-1.178-.978-1.31a1 1 0 0 0-.813 0c-.296.132-.523.525-.978 1.31Z"/></svg>',
-        missed:
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v6l4 2m6-2c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Z"/></svg>',
-        followed:
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
-      };
-      const iconTone = { deviated: "is-orange", missed: "is-red", followed: "is-green" };
       const pill = {
         deviated: '<span class="pill is-orange">Deviated</span>',
         missed: '<span class="pill is-red">Missed</span>',
@@ -109,7 +100,7 @@
       function attentionRow(item) {
         return `
           <a class="row is-tappable" href="${checkinHref(item.id)}" data-nav>
-            <span class="row-icon ${iconTone[item.status]}" aria-hidden="true">${ICONS[item.status]}</span>
+            <span class="avatar" aria-hidden="true">${escapeHtml(initials(item.name))}</span>
             <span class="row-main">
               <span class="row-title is-strong">${escapeHtml(item.name)}</span>
               <span class="row-sub">${escapeHtml(item.summary)}</span>
@@ -122,8 +113,8 @@
       function onTrackRow(item) {
         return `
           <a class="row is-tappable" href="${checkinHref(item.id)}" data-nav>
-            <span class="row-icon is-green" aria-hidden="true">${ICONS.followed}</span>
-            <span class="row-main"><span class="row-title">${escapeHtml(item.name)}</span></span>
+            <span class="avatar" aria-hidden="true">${escapeHtml(initials(item.name))}</span>
+            <span class="row-main"><span class="row-title is-strong">${escapeHtml(item.name)}</span></span>
             ${pill.followed}
             ${chevron}
           </a>`;

@@ -27,8 +27,13 @@
       </header>
 
       <main class="ios-scroll has-actionbar">
-        <h1 class="large-title" id="client-name">Plan Review</h1>
-        <p class="large-title-sub" id="plan-meta">Loading…</p>
+        <div class="identity">
+          <span class="avatar avatar--lg" id="client-avatar" aria-hidden="true"></span>
+          <div class="identity__body">
+            <div class="identity__name" id="client-name">Plan Review</div>
+            <div class="identity__meta" id="plan-meta">Loading…</div>
+          </div>
+        </div>
 
         <div class="list-group" id="totals-group" style="display: none">
           <div class="list-header">Weekly totals (planned)</div>
@@ -61,7 +66,7 @@
       import { requireAuth } from "/app/assets/js/auth.js";
       import { mountAppShell } from "/app/assets/js/shell.js";
       import { getMyGroup, getSubmittedPlans, getPlanDetail, setPlanStatus } from "/app/assets/js/data.js";
-      import { formatDateRange, formatKcal, formatGrams, titleCase, escapeHtml } from "/app/assets/js/utils.js";
+      import { formatDateRange, formatKcal, formatGrams, titleCase, escapeHtml, initials } from "/app/assets/js/utils.js";
 
       const session = await requireAuth("coach");
       mountAppShell({ role: "coach", active: "dashboard" });
@@ -89,7 +94,7 @@
       } else {
         const clientName = plan.client?.name || "Client";
         document.querySelector("#client-name").textContent = clientName;
-        document.querySelector("#nav-title").textContent = clientName;
+        document.querySelector("#client-avatar").textContent = initials(clientName);
         document.querySelector("#plan-meta").textContent =
           `Week of ${formatDateRange(plan.week_start, plan.week_end)} · ${titleCase(String(plan.status).replace(/_/g, " "))}`;
 

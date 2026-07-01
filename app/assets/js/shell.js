@@ -42,7 +42,7 @@ function renderSidebar(role, active) {
   return `
     <div class="app-sidebar-inner">
       <a class="app-brand" href="/app/index.html" data-nav>
-        <img src="/app/assets/brand-mark.svg" alt="" />
+        <img src="/app/assets/bc_icon.svg" alt="" />
         <span>Bite Club</span>
       </a>
       <nav class="app-nav" aria-label="Primary">

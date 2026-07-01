@@ -91,8 +91,6 @@
       const markAllBtn = document.querySelector("#mark-all");
 
       const statuses = new Map(); // mealId -> { status, deviationType, notes }
-      const pillText = { followed: "Followed", modified: "Modified", skipped: "Skipped" };
-      const pillClass = { followed: "is-green", modified: "is-orange", skipped: "is-red" };
       const chipClass = { breakfast: "breakfast", lunch: "lunch", dinner: "dinner", snack: "snack" };
 
       function escapeHtml(value) {
@@ -111,13 +109,12 @@
         return `
           <div class="list-group">
             <article class="card mar-card" data-meal-id="${escapeHtml(meal.id)}">
-              <div class="row" style="padding: 0 0 12px">
-                <span class="row-main">
+              <div class="mar-head">
+                <span class="mar-title">
                   <span class="row-title is-strong">${escapeHtml(meal.name)}</span>
                   <span class="row-sub">${formatKcal(meal.totals?.calories || 0)} kcal planned</span>
                 </span>
                 <span class="meal-chip ${chip}">${escapeHtml(titleCase(meal.type))}</span>
-                <span class="pill" data-state-pill>To do</span>
               </div>
               <div class="segmented adherence" role="group" aria-label="${escapeHtml(meal.name)} status">
                 <button type="button" data-status="followed">Followed</button>
@@ -153,9 +150,6 @@
         deviation.hidden = !showDeviation;
         const modifiedOnly = card.querySelector("[data-modified-only]");
         if (modifiedOnly) modifiedOnly.style.display = status === "modified" ? "" : "none";
-        const pill = card.querySelector("[data-state-pill]");
-        pill.textContent = pillText[status] || "To do";
-        pill.className = "pill " + (pillClass[status] || "");
       }
 
       function recordFromCard(card) {

@@ -80,7 +80,7 @@
       import { mountAppShell } from "/app/assets/js/shell.js";
       import { bindNavLinks } from "/app/assets/js/router.js";
       import { getMyGroup, getDigest, getSubmittedPlans, getGroupMembers, rememberDemoUser } from "/app/assets/js/data.js";
-      import { escapeHtml } from "/app/assets/js/utils.js";
+      import { escapeHtml, initials } from "/app/assets/js/utils.js";
 
       const session = await requireAuth("coach");
       mountAppShell({ role: "coach", active: "dashboard", mobileTabs: true });
@@ -97,15 +97,6 @@
         if (hrs < 24) return `Submitted ${hrs}h ago`;
         return `Submitted ${Math.round(hrs / 24)}d ago`;
       }
-      const planIcon =
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10H3m13-8v4M8 2v4m-.2 16h8.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 19.72 21 18.88 21 17.2V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22Z"/></svg>';
-      const attentionIcons = {
-        deviated:
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4m0 4h.01M10.615 3.892 2.39 18.098c-.456.788-.684 1.182-.65 1.506a1 1 0 0 0 .406.705c.263.191.718.191 1.629.191h16.45c.91 0 1.365 0 1.628-.191a1 1 0 0 0 .407-.705c.034-.324-.195-.718-.65-1.506L13.383 3.892c-.454-.785-.681-1.178-.978-1.31a1 1 0 0 0-.813 0c-.296.132-.523.525-.978 1.31Z"/></svg>',
-        missed:
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v6l4 2m6-2c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Z"/></svg>',
-      };
-      const attentionTone = { deviated: "is-orange", missed: "is-red" };
       const attentionPill = {
         deviated: '<span class="pill is-orange">Deviated</span>',
         missed: '<span class="pill is-red">Missed</span>',
@@ -147,7 +138,7 @@
           .map(
             (plan, index) => `
             <a class="row is-tappable" href="/app/coach/plan-review.html?plan=${encodeURIComponent(plan.id)}" data-nav>
-              <span class="row-icon" aria-hidden="true">${planIcon}</span>
+              <span class="avatar" aria-hidden="true">${escapeHtml(initials(plan.client?.name || "Client"))}</span>
               <span class="row-main">
                 <span class="row-title is-strong">${escapeHtml(plan.client?.name || "Client")}</span>
                 <span class="row-sub">${escapeHtml(timeAgo(plan.submitted_at))}</span>
@@ -168,7 +159,7 @@
           .map(
             (item) => `
             <a class="row is-tappable" href="/app/coach/checkin.html?client=${encodeURIComponent(item.id)}&from=dashboard" data-nav>
-              <span class="row-icon ${attentionTone[item.status] || "is-gray"}" aria-hidden="true">${attentionIcons[item.status] || attentionIcons.missed}</span>
+              <span class="avatar" aria-hidden="true">${escapeHtml(initials(item.name))}</span>
               <span class="row-main">
                 <span class="row-title is-strong">${escapeHtml(item.name)}</span>
                 <span class="row-sub">${escapeHtml(item.summary)}</span>
