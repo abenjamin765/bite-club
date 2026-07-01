@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>My Groups</title>
+    <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+    <link rel="stylesheet" href="/app/assets/css/app.css" />
+  </head>
+  <body class="app" data-role="coach" data-active="group" data-layout="board">
+    <div class="app-shell">
+      <aside class="app-sidebar" id="app-sidebar"></aside>
+      <div class="app-main">
+        <header class="nav-bar">
+          <div class="nav-bar-inner">
+            <span class="nav-title">My Groups</span>
+          </div>
+        </header>
+
+        <main class="ios-scroll has-tabbar">
+          <h1 class="large-title">My Groups</h1>
+          <p class="large-title-sub" id="page-sub">Create a program and invite clients to join.</p>
+
+          <section class="list-group" id="create-section">
+            <div class="list" id="create-fields">
+              <div class="field-row">
+                <label for="group-name">Group name</label>
+                <input class="field-input" id="group-name" placeholder="e.g. Greenfield Group" />
+              </div>
+            </div>
+            <p class="list-footer" id="create-hint">Clients join with the invite code we generate for you.</p>
+            <div style="padding: 0 16px 16px">
+              <button class="btn btn-gradient btn-block" id="create-group" type="button">Create group</button>
+              <p class="helper-text" id="create-message" aria-live="polite"></p>
+            </div>
+          </section>
+
+          <div id="groups-collection" class="stack-12" style="margin-top: 16px"></div>
+
+          <div class="list-group" id="empty-collection" style="display: none; margin-top: 16px">
+            <p class="list-footer">No groups yet. Create your first group above.</p>
+          </div>
+        </main>
+
+        <nav class="tab-bar" id="app-tabbar"></nav>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireAuth, getProfile } from "/app/assets/js/auth.js";
+      import { mountAppShell } from "/app/assets/js/shell.js";
+      import { bindNavLinks } from "/app/assets/js/router.js";
+      import {
+        getCoachGroups,
+        createGroup,
+        getGroupRoster,
+        rememberDemoUser,
+        MAX_COACH_GROUPS,
+      } from "/app/assets/js/data.js";
+
+      const session = await requireAuth("coach");
+      mountAppShell({ role: "coach", active: "group", mobileTabs: true });
+      if (!session) throw new Error("no session");
+
+      const profile = await getProfile(session.user.id);
+      rememberDemoUser({ id: session.user.id, name: profile?.name, role: "coach", email: session.user.email });
+
+      const createBtn = document.querySelector("#create-group");
+      const createFields = document.querySelector("#create-fields");
+      const createHint = document.querySelector("#create-hint");
+      const createMessage = document.querySelector("#create-message");
+      const groupsCollection = document.querySelector("#groups-collection");
+      const emptyCollection = document.querySelector("#empty-collection");
+      const pageSub = document.querySelector("#page-sub");
+      const nameInput = document.querySelector("#group-name");
+
+      const chevron =
+        '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (c) =>
+          ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+        );
+      }
+
+      function memberRowsHtml(roster) {
+        if (!roster.length) {
+          return `<p class="group-card__empty">No clients yet. Share your invite code to add them.</p>`;
+        }
+        return `<div class="group-card__members">${roster
+          .map(
+            (m) => `
+            <a class="row is-tappable" href="${m.href}" data-nav>
+              <span class="row-main">
+                <span class="row-title is-strong">${escapeHtml(m.name || "Client")}</span>
+                <span class="row-sub">${escapeHtml(m.sub)}</span>
+              </span>
+              <span class="pill ${escapeHtml(m.pillClass)}">${escapeHtml(m.pill)}</span>
+              ${chevron}
+            </a>`
+          )
+          .join("")}</div>`;
+      }
+
+      async function groupInstanceHtml(group) {
+        const roster = await getGroupRoster(group.id);
+        return `
+          <article class="group-card group-instance" data-group-id="${escapeHtml(group.id)}">
+            <h2 class="group-card__title">${escapeHtml(group.name)}</h2>
+            <div class="group-card__invite hero-card">
+              <div>
+                <div class="hero-eyebrow">Invite code</div>
+                <div class="hero-title" data-invite-code>${escapeHtml(group.invite_code)}</div>
+                <div class="hero-sub">Share this code so clients can join this group.</div>
+              </div>
+              <button class="btn btn-gray" type="button" data-copy-code>Copy</button>
+            </div>
+            <div class="group-card__section">Members (${roster.length})</div>
+            ${memberRowsHtml(roster)}
+          </article>`;
+      }
+
+      function syncCreateUi(groupCount) {
+        const atLimit = groupCount >= MAX_COACH_GROUPS;
+        createBtn.disabled = atLimit;
+        createBtn.classList.toggle("is-disabled", atLimit);
+        nameInput.disabled = atLimit;
+        createFields.hidden = atLimit;
+        createHint.hidden = atLimit;
+        if (atLimit) {
+          createMessage.textContent = "";
+          createMessage.classList.remove("is-error");
+        }
+      }
+
+      async function renderPage(groups) {
+        syncCreateUi(groups.length);
+        emptyCollection.style.display = groups.length ? "none" : "";
+        pageSub.hidden = groups.length > 0;
+        if (!groups.length) {
+          pageSub.textContent = "Create a program and invite clients to join.";
+        }
+
+        if (!groups.length) {
+          groupsCollection.innerHTML = "";
+          bindNavLinks();
+          return;
+        }
+
+        const parts = await Promise.all(groups.map((g) => groupInstanceHtml(g)));
+        groupsCollection.innerHTML = parts.join("");
+        bindNavLinks();
+      }
+
+      groupsCollection.addEventListener("click", async (event) => {
+        const copyBtn = event.target.closest("[data-copy-code]");
+        if (!copyBtn) return;
+        const card = copyBtn.closest(".group-instance");
+        const codeEl = card?.querySelector("[data-invite-code]");
+        const code = codeEl?.textContent?.trim();
+        if (!code) return;
+        try {
+          await navigator.clipboard.writeText(code);
+          copyBtn.textContent = "Copied";
+          setTimeout(() => (copyBtn.textContent = "Copy"), 1500);
+        } catch {
+          /* clipboard unavailable */
+        }
+      });
+
+      createBtn.addEventListener("click", async () => {
+        if (createBtn.disabled) return;
+        const name = nameInput.value.trim();
+        if (!name) {
+          createMessage.textContent = "Give your group a name first.";
+          createMessage.classList.add("is-error");
+          return;
+        }
+        createMessage.classList.remove("is-error");
+        createMessage.textContent = "Creating\u2026";
+        const { data, error } = await createGroup(name, session.user.id);
+        if (error) {
+          createMessage.textContent = error.message || "Could not create the group.";
+          createMessage.classList.add("is-error");
+          return;
+        }
+        createMessage.textContent = "";
+        nameInput.value = "";
+        const groups = await getCoachGroups(session.user.id);
+        if (!groups.some((g) => g.id === data.id)) {
+          groups.push(data);
+        }
+        await renderPage(groups);
+      });
+
+      const groups = await getCoachGroups(session.user.id);
+      await renderPage(groups);
+    </script>
+  </body>
+</html>

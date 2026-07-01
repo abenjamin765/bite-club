@@ -1,16 +1,28 @@
 {
-  "name": "Meal Plan",
-  "short_name": "MealPlan",
+  "name": "Bite Club",
+  "short_name": "Bite Club",
   "start_url": "/app/index.html",
   "display": "standalone",
   "background_color": "#f7f1ea",
   "theme_color": "#ff9040",
   "icons": [
     {
-      "src": "/app/assets/brand-mark.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "/app/assets/icons/pwa/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app/assets/icons/pwa/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app/assets/icons/pwa/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

@@ -2,10 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -13,88 +10,177 @@
     <link rel="stylesheet" href="/app/assets/css/tokens.css" />
     <link rel="stylesheet" href="/app/assets/css/app.css" />
   </head>
-  <body class="ios">
-    <div class="ios-viewport">
+  <body class="app" data-role="coach" data-active="dashboard" data-layout="board">
+    <div class="app-shell">
+      <aside class="app-sidebar" id="app-sidebar"></aside>
+      <div class="app-main">
       <header class="nav-bar">
         <div class="nav-bar-inner">
           <span class="nav-title">Dashboard</span>
-          <span class="nav-trailing">
-            <button class="nav-btn" id="signout" type="button">Sign Out</button>
-          </span>
         </div>
       </header>
 
       <main class="ios-scroll has-tabbar">
         <h1 class="large-title">Dashboard</h1>
-        <p class="large-title-sub">Greenfield Group &middot; 11 clients</p>
+        <p class="large-title-sub" id="group-meta">Loading…</p>
 
         <div class="hero-card with-ring">
           <div>
-            <div class="hero-eyebrow">Coach Snapshot</div>
-            <div class="hero-title">70% on track today</div>
-            <div class="hero-sub">Quickly review submitted plans and clients who need attention.</div>
+            <div class="hero-eyebrow">Today</div>
+            <div class="hero-title" id="ontrack-headline">No check-ins yet</div>
+            <div class="hero-sub">Review submitted plans and check in on clients who need attention.</div>
           </div>
-          <div class="ring" style="--percent: 70">
-            <span class="ring-center">70%</span>
+          <div class="ring" id="ontrack-ring" style="--percent: 0">
+            <span class="ring-center" id="ontrack-ring-text">0%</span>
           </div>
         </div>
 
         <div class="list-group">
           <div class="list-header">Today at a glance</div>
           <div class="stat-group" style="grid-template-columns: repeat(3, 1fr)">
-            <div class="stat"><div class="stat-value" style="color: var(--ios-green)">7</div><div class="stat-label">Followed</div></div>
-            <div class="stat"><div class="stat-value" style="color: var(--ios-orange)">2</div><div class="stat-label">Deviated</div></div>
-            <div class="stat"><div class="stat-value" style="color: var(--ios-red)">1</div><div class="stat-label">Missed</div></div>
+            <div class="stat"><div class="stat-value" id="count-followed" style="color: var(--ios-green)">0</div><div class="stat-label">Followed</div></div>
+            <div class="stat"><div class="stat-value" id="count-deviated" style="color: var(--ios-orange)">0</div><div class="stat-label">Deviated</div></div>
+            <div class="stat"><div class="stat-value" id="count-missed" style="color: var(--ios-red)">0</div><div class="stat-label">Missed</div></div>
           </div>
         </div>
 
         <div class="list-group">
           <div class="list-header">Plans awaiting review</div>
+          <div class="list" id="review-list"></div>
+          <p class="list-footer" id="review-empty" style="display: none">No plans awaiting review.</p>
+        </div>
+
+        <div class="list-group" id="attention-group" style="display: none">
+          <div class="list-header">Needs attention</div>
+          <div class="list" id="attention-list"></div>
+        </div>
+
+        <div class="list-group">
           <div class="list">
-            <a class="row is-tappable" href="/app/coach/plan-review.html" data-nav>
-              <span class="row-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10H3m13-8v4M8 2v4m-.2 16h8.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 19.72 21 18.88 21 17.2V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22Z"/></svg>
+            <a class="row is-tappable" href="/app/coach/digest.html" data-nav>
+              <span class="row-icon is-gray" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12H9m12-6H9m12 12H9m-4-6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0-6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 12a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/></svg>
               </span>
-              <span class="row-main"><span class="row-title is-strong">Alex R.</span><span class="row-sub">Submitted 45m ago</span></span>
-              <span class="pill is-tint">New</span>
-              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-            </a>
-            <a class="row is-tappable" href="/app/coach/plan-review.html" data-nav>
-              <span class="row-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10H3m13-8v4M8 2v4m-.2 16h8.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 19.72 21 18.88 21 17.2V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22Z"/></svg>
+              <span class="row-main">
+                <span class="row-title is-strong">Full daily digest</span>
+                <span class="row-sub">Complete adherence breakdown</span>
               </span>
-              <span class="row-main"><span class="row-title is-strong">Jamie K.</span><span class="row-sub">Submitted 3h ago</span></span>
               <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
             </a>
           </div>
         </div>
       </main>
 
-      <nav class="tab-bar">
-        <div class="tab-bar-inner">
-          <a class="tab-item is-active" href="/app/coach/home.html" data-nav>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.4 3H4.6c-.56 0-.84 0-1.054.109a1 1 0 0 0-.437.437C3 3.76 3 4.04 3 4.6v3.8c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C3.76 10 4.04 10 4.6 10h3.8c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C10 9.24 10 8.96 10 8.4V4.6c0-.56 0-.84-.109-1.054a1 1 0 0 0-.437-.437C9.24 3 8.96 3 8.4 3Zm11 0h-3.8c-.56 0-.84 0-1.054.109a1 1 0 0 0-.437.437C14 3.76 14 4.04 14 4.6v3.8c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C14.76 10 15.04 10 15.6 10h3.8c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C21 9.24 21 8.96 21 8.4V4.6c0-.56 0-.84-.109-1.054a1 1 0 0 0-.437-.437C20.24 3 19.96 3 19.4 3Zm0 11h-3.8c-.56 0-.84 0-1.054.109a1 1 0 0 0-.437.437C14 14.76 14 15.04 14 15.6v3.8c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C14.76 21 15.04 21 15.6 21h3.8c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C21 20.24 21 19.96 21 19.4v-3.8c0-.56 0-.84-.109-1.054a1 1 0 0 0-.437-.437C20.24 14 19.96 14 19.4 14Zm-11 0H4.6c-.56 0-.84 0-1.054.109a1 1 0 0 0-.437.437C3 14.76 3 15.04 3 15.6v3.8c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C3.76 21 4.04 21 4.6 21h3.8c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C10 20.24 10 19.96 10 19.4v-3.8c0-.56 0-.84-.109-1.054a1 1 0 0 0-.437-.437C9.24 14 8.96 14 8.4 14Z"/></svg>
-            Dashboard
-          </a>
-          <a class="tab-item" href="/app/coach/digest.html" data-nav>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12H9m12-6H9m12 12H9m-4-6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0-6a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 12a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/></svg>
-            Digest
-          </a>
-        </div>
-      </nav>
+      <nav class="tab-bar" id="app-tabbar"></nav>
+      </div>
     </div>
 
     <script type="module">
-      import { requireAuth, signOut } from "/app/assets/js/auth.js";
+      import { requireAuth, getProfile } from "/app/assets/js/auth.js";
+      import { mountAppShell } from "/app/assets/js/shell.js";
       import { bindNavLinks } from "/app/assets/js/router.js";
+      import { getMyGroup, getDigest, getSubmittedPlans, getGroupMembers, rememberDemoUser } from "/app/assets/js/data.js";
+      import { escapeHtml } from "/app/assets/js/utils.js";
 
-      await requireAuth("coach");
+      const session = await requireAuth("coach");
+      mountAppShell({ role: "coach", active: "dashboard", mobileTabs: true });
+      if (!session) throw new Error("no session");
+
+      const profile = await getProfile(session.user.id);
+      rememberDemoUser({ id: session.user.id, name: profile?.name, role: "coach", email: session.user.email });
+
+      function timeAgo(iso) {
+        if (!iso) return "Submitted";
+        const mins = Math.max(1, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+        if (mins < 60) return `Submitted ${mins}m ago`;
+        const hrs = Math.round(mins / 60);
+        if (hrs < 24) return `Submitted ${hrs}h ago`;
+        return `Submitted ${Math.round(hrs / 24)}d ago`;
+      }
+      const planIcon =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10H3m13-8v4M8 2v4m-.2 16h8.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 19.72 21 18.88 21 17.2V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 4 17.88 4 16.2 4H7.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3 6.28 3 7.12 3 8.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.28 22 6.12 22 7.8 22Z"/></svg>';
+      const attentionIcons = {
+        deviated:
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4m0 4h.01M10.615 3.892 2.39 18.098c-.456.788-.684 1.182-.65 1.506a1 1 0 0 0 .406.705c.263.191.718.191 1.629.191h16.45c.91 0 1.365 0 1.628-.191a1 1 0 0 0 .407-.705c.034-.324-.195-.718-.65-1.506L13.383 3.892c-.454-.785-.681-1.178-.978-1.31a1 1 0 0 0-.813 0c-.296.132-.523.525-.978 1.31Z"/></svg>',
+        missed:
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v6l4 2m6-2c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Z"/></svg>',
+      };
+      const attentionTone = { deviated: "is-orange", missed: "is-red" };
+      const attentionPill = {
+        deviated: '<span class="pill is-orange">Deviated</span>',
+        missed: '<span class="pill is-red">Missed</span>',
+      };
+      const chevron =
+        '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+
+      const group = await getMyGroup(session.user.id, "coach");
+      if (!group) {
+        window.location.replace("/app/coach/group.html");
+        throw new Error("no group");
+      }
+
+      const members = await getGroupMembers(group.id);
+      document.querySelector("#group-meta").textContent =
+        `${group.name} · ${members.length} ${members.length === 1 ? "client" : "clients"}`;
+
+      const { counts, attention, totalMembers } = await getDigest(group.id);
+      document.querySelector("#count-followed").textContent = counts.followed;
+      document.querySelector("#count-deviated").textContent = counts.deviated;
+      document.querySelector("#count-missed").textContent = counts.missed;
+
+      const submittedTotal = counts.followed + counts.deviated + counts.missed;
+      if (submittedTotal > 0 && (counts.followed + counts.deviated) > 0) {
+        const pct = Math.round((counts.followed / totalMembers) * 100);
+        document.querySelector("#ontrack-ring").style.setProperty("--percent", String(pct));
+        document.querySelector("#ontrack-ring-text").textContent = `${pct}%`;
+        document.querySelector("#ontrack-headline").textContent = `${pct}% on track today`;
+      }
+
+      // Plans awaiting review.
+      const queue = await getSubmittedPlans(group.id);
+      const list = document.querySelector("#review-list");
+      const reviewEmpty = document.querySelector("#review-empty");
+      if (!queue.length) {
+        reviewEmpty.style.display = "";
+      } else {
+        list.innerHTML = queue
+          .map(
+            (plan, index) => `
+            <a class="row is-tappable" href="/app/coach/plan-review.html?plan=${encodeURIComponent(plan.id)}" data-nav>
+              <span class="row-icon" aria-hidden="true">${planIcon}</span>
+              <span class="row-main">
+                <span class="row-title is-strong">${escapeHtml(plan.client?.name || "Client")}</span>
+                <span class="row-sub">${escapeHtml(timeAgo(plan.submitted_at))}</span>
+              </span>
+              ${index === 0 ? '<span class="pill is-tint">New</span>' : ""}
+              ${chevron}
+            </a>`
+          )
+          .join("");
+      }
+
+      // Clients needing attention (missed or deviated).
+      const attentionGroup = document.querySelector("#attention-group");
+      const attentionList = document.querySelector("#attention-list");
+      if (attention.length) {
+        attentionGroup.style.display = "";
+        attentionList.innerHTML = attention
+          .map(
+            (item) => `
+            <a class="row is-tappable" href="/app/coach/checkin.html?client=${encodeURIComponent(item.id)}&from=dashboard" data-nav>
+              <span class="row-icon ${attentionTone[item.status] || "is-gray"}" aria-hidden="true">${attentionIcons[item.status] || attentionIcons.missed}</span>
+              <span class="row-main">
+                <span class="row-title is-strong">${escapeHtml(item.name)}</span>
+                <span class="row-sub">${escapeHtml(item.summary)}</span>
+              </span>
+              ${attentionPill[item.status] || ""}
+              ${chevron}
+            </a>`
+          )
+          .join("");
+      }
+
       bindNavLinks();
-
-      document.querySelector("#signout").addEventListener("click", async () => {
-        await signOut();
-        window.location.replace("/app/auth/index.html");
-      });
     </script>
   </body>
 </html>

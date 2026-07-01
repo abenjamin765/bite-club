@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="theme-color" content="#ffffff" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -13,94 +13,209 @@
     <link rel="stylesheet" href="/app/assets/css/tokens.css" />
     <link rel="stylesheet" href="/app/assets/css/app.css" />
   </head>
-  <body class="ios">
-    <div class="ios-viewport">
-      <header class="nav-bar">
-        <div class="nav-bar-inner">
-          <span class="nav-leading">
-            <a class="nav-btn" href="/app/client/plan/index.html" data-nav>
-              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-              Plan
-            </a>
-          </span>
-          <span class="nav-title" id="nav-title">Monday</span>
-        </div>
-      </header>
-
-      <main class="ios-scroll has-actionbar">
-        <h1 class="large-title" id="day-title">Monday</h1>
-
-        <div class="list-group">
-          <div class="list-header">Meals</div>
-          <div class="list">
-            <a class="row is-tappable" href="/app/client/plan/ingredient.html" data-nav>
-              <span class="row-main"><span class="row-title is-strong">Overnight oats</span><span class="row-sub">Breakfast &middot; 420 kcal</span></span>
-              <span class="meal-chip breakfast">Breakfast</span>
-              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-            </a>
-            <a class="row is-tappable" href="/app/client/plan/ingredient.html" data-nav>
-              <span class="row-main"><span class="row-title is-strong">Chicken bowl</span><span class="row-sub">Lunch &middot; 610 kcal</span></span>
-              <span class="meal-chip lunch">Lunch</span>
-              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-            </a>
+  <body class="app" data-role="client" data-active="plan">
+    <div class="app-shell">
+      <aside class="app-sidebar" id="app-sidebar"></aside>
+      <div class="app-main">
+        <header class="nav-bar">
+          <div class="nav-bar-inner">
+            <span class="nav-leading">
+              <a class="nav-btn" href="/app/client/plan/index.html" data-nav>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                Plan
+              </a>
+            </span>
+            <span class="nav-title" id="nav-title">Day</span>
           </div>
-        </div>
+        </header>
 
-        <div class="list-group">
-          <div class="list-header">Add a meal</div>
-          <div class="list">
-            <div class="field-row">
-              <label for="meal-name">Name</label>
-              <input class="field-input" id="meal-name" placeholder="e.g. Chicken bowl" />
-            </div>
-            <div class="field-row">
-              <label for="meal-type">Type</label>
-              <select class="field-select" id="meal-type">
-                <option>Breakfast</option>
-                <option>Lunch</option>
-                <option>Dinner</option>
-                <option>Snack</option>
-              </select>
-            </div>
-            <button class="row is-tappable" id="from-saved" type="button">
-              <span class="row-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 10.5 2 2L15.5 8M19 21V7.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C16.72 3 15.88 3 14.2 3H9.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C5 5.28 5 6.12 5 7.8V21l7-4 7 4Z"/></svg>
-              </span>
-              <span class="row-main"><span class="row-title">Add from saved meals</span></span>
-              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
+        <main class="ios-scroll">
+          <h1 class="large-title" id="day-title">Day</h1>
+          <p class="large-title-sub" id="day-sub">&nbsp;</p>
+
+          <div class="list-group">
+            <div class="list-header">Meals</div>
+            <div class="list" id="meal-list"></div>
+            <p class="list-footer" id="meal-empty" style="display: none">No meals yet. Add your first meal below.</p>
           </div>
-        </div>
-      </main>
 
-      <div class="action-bar">
-        <div class="action-bar-inner">
-          <button class="btn btn-gradient btn-block" id="save-meal">Add Meal &amp; Ingredients</button>
-        </div>
+          <section id="editor">
+            <div class="list-group">
+              <div class="list-header">Add a meal</div>
+              <div class="list">
+                <div class="field-row">
+                  <label for="meal-name">Name</label>
+                  <input class="field-input" id="meal-name" placeholder="e.g. Chicken bowl" autocomplete="off" />
+                </div>
+                <div class="field-row">
+                  <label for="meal-type">Type</label>
+                  <select class="field-select" id="meal-type">
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="dinner">Dinner</option>
+                    <option value="snack">Snack</option>
+                  </select>
+                </div>
+              </div>
+              <div style="padding: 12px 16px 0">
+                <button class="btn btn-gradient btn-block" id="add-meal">Add Meal</button>
+                <p class="helper-text" id="add-message" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div class="list-group" id="saved-group" style="display: none">
+              <div class="list-header">Reuse a saved meal</div>
+              <div class="list" id="saved-list"></div>
+            </div>
+          </section>
+        </main>
       </div>
     </div>
 
     <script type="module">
-      import { requireAuth } from "/app/assets/js/auth.js";
+      import { requireAuth, getProfile } from "/app/assets/js/auth.js";
+      import { mountAppShell } from "/app/assets/js/shell.js";
       import { bindNavLinks } from "/app/assets/js/router.js";
+      import {
+        getMyGroup,
+        getOrCreateCurrentPlan,
+        getPlanBuilder,
+        addMeal,
+        getSavedMeals,
+        addSavedMealToDay,
+        rememberDemoUser,
+      } from "/app/assets/js/data.js";
+      import { startOfWeekIso, todayIso, dowLong, formatKcal, formatGrams, titleCase, escapeHtml } from "/app/assets/js/utils.js";
 
-      await requireAuth("client");
-      bindNavLinks();
+      const session = await requireAuth("client");
+      mountAppShell({ role: "client", active: "plan" });
+      if (!session) throw new Error("no session");
 
-      const day = new URLSearchParams(window.location.search).get("day") || "mon";
-      const dayMap = { mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" };
-      const name = dayMap[day] || "Monday";
-      document.querySelector("#day-title").textContent = name;
-      document.querySelector("#nav-title").textContent = name;
+      const profile = await getProfile(session.user.id);
+      rememberDemoUser({ id: session.user.id, name: profile?.name, role: "client", email: session.user.email });
 
-      function goToIngredients() {
-        const mealName = document.querySelector("#meal-name").value.trim();
-        if (mealName) localStorage.setItem("demo.lastMealName", mealName);
-        window.location.assign("/app/client/plan/ingredient.html");
+      const group = await getMyGroup(session.user.id, "client");
+      if (!group) {
+        window.location.replace("/app/client/join.html");
+        throw new Error("no group");
       }
 
-      document.querySelector("#save-meal").addEventListener("click", goToIngredients);
-      document.querySelector("#from-saved").addEventListener("click", goToIngredients);
+      const date = new URLSearchParams(window.location.search).get("date") || todayIso();
+      const chevron =
+        '<svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+
+      const plan = await getOrCreateCurrentPlan(session.user.id, group.id, startOfWeekIso(date));
+
+      const dayName = dowLong(date);
+      document.querySelector("#day-title").textContent = dayName;
+      document.querySelector("#nav-title").textContent = dayName;
+
+      async function render() {
+        const view = await getPlanBuilder(plan);
+        const day = view.days.find((d) => d.date === date) || { meals: [], totals: { calories: 0, protein: 0, carbs: 0, fat: 0 } };
+
+        const list = document.querySelector("#meal-list");
+        const empty = document.querySelector("#meal-empty");
+        if (!day.meals.length) {
+          list.innerHTML = "";
+          empty.style.display = "";
+        } else {
+          empty.style.display = "none";
+          list.innerHTML = day.meals
+            .map((meal) => {
+              const type = (meal.type || "other").toLowerCase();
+              const kcal = formatKcal(meal.totals.calories);
+              const sub = meal.ingredientCount
+                ? `${meal.ingredientCount} ${meal.ingredientCount === 1 ? "ingredient" : "ingredients"} · ${kcal} kcal`
+                : "No ingredients yet";
+              const subStyle = meal.ingredientCount ? "" : ' style="color: var(--ios-tint)"';
+              return `
+                <a class="row is-tappable" href="/app/client/plan/ingredient.html?meal=${encodeURIComponent(meal.id)}" data-nav>
+                  <span class="row-main">
+                    <span class="row-title is-strong">${escapeHtml(meal.name)}</span>
+                    <span class="row-sub"${subStyle}>${escapeHtml(sub)}</span>
+                  </span>
+                  <span class="meal-chip ${escapeHtml(type)}">${escapeHtml(titleCase(meal.type))}</span>
+                  ${chevron}
+                </a>`;
+            })
+            .join("");
+          bindNavLinks();
+        }
+
+        const t = day.totals;
+        document.querySelector("#day-sub").textContent = day.meals.length
+          ? `${formatKcal(t.calories)} kcal · ${formatGrams(t.protein)}g P · ${formatGrams(t.carbs)}g C · ${formatGrams(t.fat)}g F`
+          : "No meals planned yet";
+
+        // Editing is only allowed while the plan is a draft or needs changes.
+        document.querySelector("#editor").style.display = view.editable ? "" : "none";
+      }
+
+      await render();
+
+      // Saved meals for quick reuse.
+      const savedGroup = document.querySelector("#saved-group");
+      const savedList = document.querySelector("#saved-list");
+      async function renderSaved() {
+        const saved = await getSavedMeals(session.user.id);
+        if (!saved.length) {
+          savedGroup.style.display = "none";
+          return;
+        }
+        savedGroup.style.display = "";
+        savedList.innerHTML = saved
+          .map((m) => {
+            const n = Array.isArray(m.ingredients) ? m.ingredients.length : 0;
+            return `
+              <button class="row is-tappable" type="button" data-saved="${escapeHtml(m.id)}">
+                <span class="row-main">
+                  <span class="row-title is-strong">${escapeHtml(m.name)}</span>
+                  <span class="row-sub">${n} ${n === 1 ? "ingredient" : "ingredients"}</span>
+                </span>
+                <span class="pill is-tint">Add</span>
+              </button>`;
+          })
+          .join("");
+      }
+      await renderSaved();
+
+      const nameInput = document.querySelector("#meal-name");
+      const typeSelect = document.querySelector("#meal-type");
+      const addBtn = document.querySelector("#add-meal");
+      const addMessage = document.querySelector("#add-message");
+
+      addBtn.addEventListener("click", async () => {
+        const name = nameInput.value.trim();
+        if (!name) {
+          addMessage.textContent = "Give the meal a name.";
+          return;
+        }
+        addBtn.disabled = true;
+        addMessage.textContent = "Adding…";
+        const { data, error } = await addMeal(plan, date, { name, type: typeSelect.value });
+        if (error) {
+          addMessage.textContent = error.message || "Could not add meal.";
+          addBtn.disabled = false;
+          return;
+        }
+        // Straight into the ingredient editor for the new meal.
+        window.location.assign(`/app/client/plan/ingredient.html?meal=${encodeURIComponent(data.id)}`);
+      });
+
+      savedList.addEventListener("click", async (event) => {
+        const btn = event.target.closest("[data-saved]");
+        if (!btn) return;
+        btn.disabled = true;
+        const savedId = btn.getAttribute("data-saved");
+        const { error } = await addSavedMealToDay(plan, date, savedId, session.user.id);
+        if (error) {
+          btn.disabled = false;
+          return;
+        }
+        nameInput.value = "";
+        await render();
+      });
     </script>
   </body>
 </html>

@@ -2,10 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -13,8 +10,10 @@
     <link rel="stylesheet" href="/app/assets/css/tokens.css" />
     <link rel="stylesheet" href="/app/assets/css/app.css" />
   </head>
-  <body class="ios">
-    <div class="ios-viewport">
+  <body class="app" data-role="coach" data-active="dashboard">
+    <div class="app-shell">
+      <aside class="app-sidebar" id="app-sidebar"></aside>
+      <div class="app-main">
       <header class="nav-bar">
         <div class="nav-bar-inner">
           <span class="nav-leading">
@@ -23,65 +22,145 @@
               Dashboard
             </a>
           </span>
-          <span class="nav-title">Plan Review</span>
+          <span class="nav-title" id="nav-title">Plan Review</span>
         </div>
       </header>
 
       <main class="ios-scroll has-actionbar">
-        <h1 class="large-title">Alex R.</h1>
-        <p class="large-title-sub">Week of Jun 30 &middot; submitted 45m ago</p>
+        <h1 class="large-title" id="client-name">Plan Review</h1>
+        <p class="large-title-sub" id="plan-meta">Loading…</p>
 
-        <div class="list-group">
+        <div class="list-group" id="totals-group" style="display: none">
           <div class="list-header">Weekly totals (planned)</div>
           <div class="stat-group">
-            <div class="stat"><div class="stat-value">2,050</div><div class="stat-label">kcal</div></div>
-            <div class="stat"><div class="stat-value">156g</div><div class="stat-label">Protein</div></div>
-            <div class="stat"><div class="stat-value">190g</div><div class="stat-label">Carbs</div></div>
-            <div class="stat"><div class="stat-value">68g</div><div class="stat-label">Fat</div></div>
+            <div class="stat"><div class="stat-value" id="tot-kcal">0</div><div class="stat-label">kcal</div></div>
+            <div class="stat"><div class="stat-value" id="tot-protein">0g</div><div class="stat-label">Protein</div></div>
+            <div class="stat"><div class="stat-value" id="tot-carbs">0g</div><div class="stat-label">Carbs</div></div>
+            <div class="stat"><div class="stat-value" id="tot-fat">0g</div><div class="stat-label">Fat</div></div>
           </div>
         </div>
 
-        <div class="list-group">
-          <div class="list-header">Monday</div>
-          <div class="list">
-            <div class="row">
-              <span class="row-main"><span class="row-title is-strong">Overnight oats</span><span class="row-sub">Breakfast &middot; oats, whey, berries</span></span>
-              <span class="meal-chip breakfast">Breakfast</span>
-              <span class="row-value">420</span>
-            </div>
-            <div class="row">
-              <span class="row-main"><span class="row-title is-strong">Chicken bowl</span><span class="row-sub">Lunch &middot; chicken, rice, olive oil</span></span>
-              <span class="meal-chip lunch">Lunch</span>
-              <span class="row-value">610</span>
-            </div>
-          </div>
-        </div>
+        <div id="plan-body"></div>
 
-        <div class="list-group">
-          <div class="list-header">Tuesday</div>
-          <div class="list">
-            <div class="row">
-              <span class="row-main"><span class="row-title is-strong">Greek yogurt bowl</span><span class="row-sub">Breakfast &middot; yogurt, granola, honey</span></span>
-              <span class="meal-chip breakfast">Breakfast</span>
-              <span class="row-value">380</span>
-            </div>
-          </div>
+        <div class="list-group" id="empty-state" style="display: none">
+          <p class="list-footer" id="empty-text">No plan to review.</p>
         </div>
       </main>
 
-      <div class="action-bar">
+      <div class="action-bar" id="action-bar" style="display: none">
         <div class="action-bar-inner">
-          <button class="btn btn-gradient btn-block">Approve Plan</button>
-          <button class="btn btn-gray btn-block">Request Changes</button>
+          <button class="btn btn-gradient btn-block" id="approve">Approve Plan</button>
+          <button class="btn btn-gray btn-block" id="request-changes">Request Changes</button>
+          <p class="action-hint" id="review-hint" aria-live="polite"></p>
         </div>
+      </div>
       </div>
     </div>
 
     <script type="module">
       import { requireAuth } from "/app/assets/js/auth.js";
-      import { bindNavLinks } from "/app/assets/js/router.js";
-      await requireAuth("coach");
-      bindNavLinks();
+      import { mountAppShell } from "/app/assets/js/shell.js";
+      import { getMyGroup, getSubmittedPlans, getPlanDetail, setPlanStatus } from "/app/assets/js/data.js";
+      import { formatDateRange, formatKcal, formatGrams, titleCase, escapeHtml } from "/app/assets/js/utils.js";
+
+      const session = await requireAuth("coach");
+      mountAppShell({ role: "coach", active: "dashboard" });
+      if (!session) throw new Error("no session");
+
+      const emptyState = document.querySelector("#empty-state");
+      const emptyText = document.querySelector("#empty-text");
+      const actionBar = document.querySelector("#action-bar");
+      const hint = document.querySelector("#review-hint");
+
+      let planId = new URLSearchParams(window.location.search).get("plan");
+
+      // No explicit plan id: fall back to the oldest item in the review queue.
+      if (!planId) {
+        const group = await getMyGroup(session.user.id, "coach");
+        const queue = group ? await getSubmittedPlans(group.id) : [];
+        planId = queue.length ? queue[queue.length - 1].id : null;
+      }
+
+      const plan = planId ? await getPlanDetail(planId) : null;
+
+      if (!plan) {
+        emptyState.style.display = "";
+        emptyText.innerHTML = 'No submitted plans to review. <a href="/app/coach/home.html" data-nav>Back to dashboard</a>.';
+      } else {
+        const clientName = plan.client?.name || "Client";
+        document.querySelector("#client-name").textContent = clientName;
+        document.querySelector("#nav-title").textContent = clientName;
+        document.querySelector("#plan-meta").textContent =
+          `Week of ${formatDateRange(plan.week_start, plan.week_end)} · ${titleCase(String(plan.status).replace(/_/g, " "))}`;
+
+        const body = document.querySelector("#plan-body");
+
+        if (!plan.mealCount) {
+          body.innerHTML = '<div class="list-group"><p class="list-footer">This plan has no meals yet.</p></div>';
+        } else {
+          document.querySelector("#totals-group").style.display = "";
+          document.querySelector("#tot-kcal").textContent = formatKcal(plan.weekTotals.calories);
+          document.querySelector("#tot-protein").textContent = formatGrams(plan.weekTotals.protein) + "g";
+          document.querySelector("#tot-carbs").textContent = formatGrams(plan.weekTotals.carbs) + "g";
+          document.querySelector("#tot-fat").textContent = formatGrams(plan.weekTotals.fat) + "g";
+
+          const mealBlock = (meal) => {
+            const type = (meal.type || "other").toLowerCase();
+            const macros = `${formatGrams(meal.totals.protein)}g P · ${formatGrams(meal.totals.carbs)}g C · ${formatGrams(meal.totals.fat)}g F`;
+            const ingredientRows = (meal.ingredients || [])
+              .map(
+                (ing) => `
+                  <div class="row">
+                    <span class="row-main">
+                      <span class="row-title">${escapeHtml(ing.name)}</span>
+                      <span class="row-sub">${formatGrams(ing.quantity)} ${escapeHtml(ing.unit || "serving")}</span>
+                    </span>
+                    <span class="row-value">${formatKcal(ing.calories)} kcal</span>
+                  </div>`
+              )
+              .join("");
+            return `
+              <div class="row">
+                <span class="row-main">
+                  <span class="row-title is-strong">${escapeHtml(meal.name)}</span>
+                  <span class="row-sub">${formatKcal(meal.totals.calories)} kcal · ${macros}</span>
+                </span>
+                <span class="meal-chip ${escapeHtml(type)}">${escapeHtml(titleCase(meal.type))}</span>
+              </div>
+              ${ingredientRows}`;
+          };
+
+          body.innerHTML = plan.days
+            .map((day) => {
+              const meals = day.meals.map(mealBlock).join("");
+              return `
+                <div class="list-group">
+                  <div class="list-header">${escapeHtml(day.dowLong)} · ${formatKcal(day.totals.calories)} kcal</div>
+                  <div class="list">${meals}</div>
+                </div>`;
+            })
+            .join("");
+        }
+
+        actionBar.style.display = "";
+
+        async function decide(status, label) {
+          document.querySelector("#approve").disabled = true;
+          document.querySelector("#request-changes").disabled = true;
+          hint.textContent = `${label}…`;
+          const { error } = await setPlanStatus(plan.id, status);
+          if (error) {
+            hint.textContent = error.message || "Something went wrong.";
+            document.querySelector("#approve").disabled = false;
+            document.querySelector("#request-changes").disabled = false;
+            return;
+          }
+          window.location.assign("/app/coach/home.html");
+        }
+
+        document.querySelector("#approve").addEventListener("click", () => decide("approved", "Approving"));
+        document.querySelector("#request-changes").addEventListener("click", () => decide("needs_changes", "Requesting changes"));
+      }
     </script>
   </body>
 </html>

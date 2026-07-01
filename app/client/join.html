@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Join Your Group</title>
+    <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+    <link rel="stylesheet" href="/app/assets/css/app.css" />
+  </head>
+  <body class="app-auth">
+    <div class="ios-viewport">
+      <main class="auth-screen">
+        <div class="auth-brand">
+          <span class="auth-logo" aria-hidden="true">
+            <img src="/app/assets/brand-mark.svg" alt="" />
+          </span>
+          <h1 class="auth-title">Join your coach's group</h1>
+          <p class="auth-sub">Enter the invite code your coach gave you to get started.</p>
+        </div>
+
+        <form id="join-form" class="stack-12">
+          <div class="list">
+            <div class="field-row">
+              <label for="code">Invite code</label>
+              <input
+                class="field-input"
+                id="code"
+                name="code"
+                placeholder="e.g. 7KQ2MX"
+                autocomplete="off"
+                autocapitalize="characters"
+                spellcheck="false"
+                required
+              />
+            </div>
+          </div>
+          <button class="btn btn-filled btn-block" type="submit" id="join-action">Join Group</button>
+          <p class="helper-text" id="join-message" aria-live="polite"></p>
+          <button class="btn btn-plain btn-block" type="button" data-signout>Sign out</button>
+        </form>
+      </main>
+    </div>
+
+    <script type="module">
+      import { requireAuth, getProfile, signOut } from "/app/assets/js/auth.js";
+      import { joinGroupByCode, getMyGroup, rememberDemoUser } from "/app/assets/js/data.js";
+
+      const session = await requireAuth("client");
+      if (session) {
+        const profile = await getProfile(session.user.id);
+        rememberDemoUser({ id: session.user.id, name: profile?.name, role: "client", email: session.user.email });
+
+        // Already in a group? Skip straight to home.
+        const existing = await getMyGroup(session.user.id, "client");
+        if (existing) window.location.replace("/app/client/home.html");
+      }
+
+      const form = document.querySelector("#join-form");
+      const message = document.querySelector("#join-message");
+      const button = document.querySelector("#join-action");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!session) return;
+        message.classList.remove("is-error");
+        message.textContent = "Joining\u2026";
+        button.disabled = true;
+
+        const code = new FormData(form).get("code");
+        const { error } = await joinGroupByCode(code, session.user.id);
+        if (error) {
+          message.textContent = error.message || "Could not join that group.";
+          message.classList.add("is-error");
+          button.disabled = false;
+          return;
+        }
+        window.location.replace("/app/client/home.html");
+      });
+
+      document.querySelectorAll("[data-signout]").forEach((el) =>
+        el.addEventListener("click", async () => {
+          await signOut();
+          window.location.replace("/app/auth/index.html");
+        })
+      );
+    </script>
+  </body>
+</html>

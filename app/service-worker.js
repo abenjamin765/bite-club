@@ -1,9 +1,11 @@
-const CACHE_NAME = "meal-plan-pwa-v1";
+const CACHE_NAME = "bite-club-pwa-v3";
 const ASSETS = [
   "/app/index.html",
   "/app/manifest.json",
+  "/app/assets/icons/pwa/icon-192.png",
+  "/app/assets/icons/pwa/icon-512.png",
+  "/app/assets/icons/pwa/apple-touch-icon.png",
   "/app/assets/css/tokens.css",
-  "/app/assets/css/components.css",
   "/app/assets/css/app.css",
 ];
 

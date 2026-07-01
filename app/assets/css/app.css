@@ -1,5 +1,5 @@
 /**
- * Native iOS + warm brand design system for the Meal Plan PWA.
+ * Native iOS + warm brand design system for the Bite Club PWA.
  * Keeps iOS interaction patterns while adding a distinctive food-forward identity.
  */
 
@@ -53,9 +53,10 @@ body {
   padding: 0;
 }
 
-body.ios {
+body.ios,
+body.app,
+body.app-auth {
   font-family: var(--ios-font);
-  background: var(--ios-bg-grouped);
   color: var(--ios-label);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -66,34 +67,142 @@ body.ios {
   overscroll-behavior-y: none;
 }
 
-.ios-viewport {
-  position: relative;
-  width: 100%;
-  max-width: 440px;
-  margin: 0 auto;
-  min-height: 100dvh;
+body.app,
+body.app-auth {
   background:
     radial-gradient(circle at 14% -8%, color-mix(in srgb, var(--color-brand-200) 30%, transparent), transparent 35%),
     radial-gradient(circle at 86% 8%, color-mix(in srgb, var(--color-brand-100) 24%, transparent), transparent 34%),
     var(--ios-bg-grouped);
+}
+
+body.app-auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.app-shell {
+  min-height: 100dvh;
+  display: flex;
+  width: 100%;
+}
+
+.app-sidebar {
+  display: none;
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+}
+
+.app-sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  padding: calc(var(--safe-top) + 16px) 16px calc(var(--safe-bottom) + 16px);
+  background: color-mix(in srgb, var(--ios-bg-elevated) 94%, transparent);
+  border-right: 1px solid var(--ios-separator);
+  -webkit-backdrop-filter: saturate(170%) blur(16px);
+  backdrop-filter: saturate(170%) blur(16px);
+}
+
+.app-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  color: var(--ios-label);
+  text-decoration: none;
+  font-family: var(--font-rounded);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.app-brand img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.app-nav {
+  display: grid;
+  gap: 6px;
+}
+
+.app-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  color: var(--ios-label-secondary);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 580;
+}
+
+.app-nav-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+.app-nav-link.is-active {
+  color: var(--ios-tint);
+  background: color-mix(in srgb, var(--ios-tint) 14%, transparent);
+}
+
+.app-signout-btn {
+  appearance: none;
+  border: 0;
+  margin-top: auto;
+  border-radius: 12px;
+  min-height: 44px;
+  padding: 8px 12px;
+  text-align: left;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 580;
+  color: var(--ios-tint);
+  background: color-mix(in srgb, var(--ios-tint) 10%, transparent);
+  cursor: pointer;
+}
+
+.ios-viewport {
+  position: relative;
+  width: min(420px, 100%);
+  min-height: min(640px, calc(100dvh - 32px));
+  border-radius: 20px;
   overflow: hidden;
+  background: var(--ios-bg-grouped);
+  box-shadow:
+    0 18px 40px rgba(89, 54, 32, 0.16),
+    0 0 0 1px rgba(255, 255, 255, 0.42);
+  display: flex;
+  flex-direction: column;
 }
 
 @media (min-width: 480px) {
   body.ios {
     background: linear-gradient(180deg, #efe5db 0%, #f7f1ea 100%);
   }
+}
 
-  .ios-viewport {
-    border-radius: 22px;
-    overflow: clip;
-    box-shadow:
-      0 18px 40px rgba(89, 54, 32, 0.16),
-      0 0 0 1px rgba(255, 255, 255, 0.42);
-    margin: 18px auto;
-    min-height: calc(100dvh - 36px);
+@media (min-width: 768px) {
+  .app-sidebar {
+    width: var(--sidebar-w);
+    display: block;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    z-index: 20;
   }
 }
 
@@ -196,24 +305,26 @@ body.ios {
 /* ── Scroll container ────────────────────────────────── */
 
 .ios-scroll {
+  --content-w: var(--content-narrow);
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: calc(28px + var(--safe-bottom));
+  padding-bottom: 24px;
+  padding-inline: max(16px, calc((100% - var(--content-w)) / 2));
 }
 
 .ios-scroll.has-tabbar {
-  padding-bottom: calc(var(--tabbar-height) + var(--safe-bottom) + 20px);
+  padding-bottom: 20px;
 }
 
 .ios-scroll.has-actionbar {
-  padding-bottom: calc(104px + var(--safe-bottom));
+  padding-bottom: 20px;
 }
 
 /* ── Grouped lists ───────────────────────────────────── */
 
 .list-group {
-  margin: 18px 16px 0;
+  margin: 18px 0 0;
 }
 
 .list-group:first-child {
@@ -339,6 +450,29 @@ button.row:active,
   color: var(--ios-label-tertiary);
 }
 
+.icon-btn {
+  appearance: none;
+  border: 0;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--ios-red) 10%, transparent);
+  color: var(--ios-red);
+  cursor: pointer;
+}
+
+.icon-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.icon-btn:active {
+  opacity: 0.6;
+}
+
 /* ── Cards, hero, rings ──────────────────────────────── */
 
 .card {
@@ -412,8 +546,8 @@ button.row:active,
   position: absolute;
   inset: 7px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .ring-center {
@@ -425,7 +559,7 @@ button.row:active,
   font-weight: 700;
   font-size: 15px;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: rgba(90, 45, 8, 0.9);
 }
 
 .ring-stack {
@@ -517,11 +651,9 @@ button.row:active,
 /* ── Bars ─────────────────────────────────────────────── */
 
 .action-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
+  position: sticky;
   bottom: 0;
-  z-index: 60;
+  z-index: 30;
   padding: 12px 16px calc(12px + var(--safe-bottom));
   background: var(--ios-bg-bar);
   -webkit-backdrop-filter: saturate(170%) blur(18px);
@@ -531,7 +663,7 @@ button.row:active,
 
 .action-bar-inner {
   width: 100%;
-  max-width: 440px;
+  max-width: var(--content-narrow);
   margin: 0 auto;
   display: grid;
   gap: 8px;
@@ -544,11 +676,9 @@ button.row:active,
 }
 
 .tab-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
+  position: sticky;
   bottom: 0;
-  z-index: 60;
+  z-index: 30;
   display: flex;
   padding-bottom: var(--safe-bottom);
   background: var(--ios-bg-bar);
@@ -559,11 +689,16 @@ button.row:active,
 
 .tab-bar-inner {
   width: 100%;
-  max-width: 440px;
+  max-width: var(--content-narrow);
   margin: 0 auto;
   display: flex;
   padding: 2px 12px 0;
   gap: 6px;
+}
+
+body.app[data-layout="board"] .action-bar-inner,
+body.app[data-layout="board"] .tab-bar-inner {
+  max-width: var(--content-board);
 }
 
 .tab-item {
@@ -620,6 +755,10 @@ button.row:active,
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .segmented button:active {
@@ -649,21 +788,31 @@ button.row:active,
 
 .segmented button[data-status]::before {
   content: "";
-  display: inline-block;
-  width: 12px;
-  margin-right: 4px;
+  display: none;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  mask: center / contain no-repeat;
+  -webkit-mask: center / contain no-repeat;
 }
 
 .segmented button[data-status="followed"].is-active::before {
-  content: "✓";
+  display: inline-block;
+  mask-image: url("/app/assets/icons/check.svg");
+  -webkit-mask-image: url("/app/assets/icons/check.svg");
 }
 
 .segmented button[data-status="modified"].is-active::before {
-  content: "✎";
+  display: inline-block;
+  mask-image: url("/app/assets/icons/edit-02.svg");
+  -webkit-mask-image: url("/app/assets/icons/edit-02.svg");
 }
 
 .segmented button[data-status="skipped"].is-active::before {
-  content: "−";
+  display: inline-block;
+  mask-image: url("/app/assets/icons/minus.svg");
+  -webkit-mask-image: url("/app/assets/icons/minus.svg");
 }
 
 /* ── Form fields ──────────────────────────────────────── */
@@ -828,16 +977,34 @@ button.row:active,
 }
 
 .meal-chip::before {
-  content: "•";
-  font-size: 16px;
-  line-height: 1;
-  color: var(--color-brand-800);
+  content: "";
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  background-color: var(--color-brand-800);
+  mask: center / contain no-repeat;
+  -webkit-mask: center / contain no-repeat;
 }
 
-.meal-chip.breakfast::before { content: "☀"; }
-.meal-chip.lunch::before { content: "◐"; }
-.meal-chip.dinner::before { content: "☾"; }
-.meal-chip.snack::before { content: "◆"; }
+.meal-chip.breakfast::before {
+  mask-image: url("/app/assets/icons/sun.svg");
+  -webkit-mask-image: url("/app/assets/icons/sun.svg");
+}
+
+.meal-chip.lunch::before {
+  mask-image: url("/app/assets/icons/sun-setting-01.svg");
+  -webkit-mask-image: url("/app/assets/icons/sun-setting-01.svg");
+}
+
+.meal-chip.dinner::before {
+  mask-image: url("/app/assets/icons/moon-01.svg");
+  -webkit-mask-image: url("/app/assets/icons/moon-01.svg");
+}
+
+.meal-chip.snack::before {
+  mask-image: url("/app/assets/icons/star-01.svg");
+  -webkit-mask-image: url("/app/assets/icons/star-01.svg");
+}
 
 /* ── Day selector ─────────────────────────────────────── */
 
@@ -994,6 +1161,95 @@ button.row:active,
   color: var(--ios-red);
 }
 
+@media (min-width: 768px) {
+  .tab-bar {
+    display: none;
+  }
+}
+
+body.app[data-layout="board"] .ios-scroll {
+  --content-w: var(--content-board);
+}
+
+@media (min-width: 1024px) {
+  body.app[data-layout="board"] .ios-scroll {
+    column-count: 2;
+    column-gap: 24px;
+  }
+
+  body.app[data-layout="board"] .ios-scroll > .large-title,
+  body.app[data-layout="board"] .ios-scroll > .large-title-sub,
+  body.app[data-layout="board"] .ios-scroll > .day-strip,
+  body.app[data-layout="board"] .ios-scroll > .hero-card {
+    column-span: all;
+  }
+
+  body.app[data-layout="board"] .ios-scroll > .list-group {
+    break-inside: avoid;
+  }
+}
+
 .text-center { text-align: center; }
 .stack-12 { display: grid; gap: 12px; }
 .stack-8 { display: grid; gap: 8px; }
+
+/* ── Coach group card (My Groups) ────────────────────── */
+
+.group-card {
+  background: var(--ios-bg-elevated);
+  border-radius: var(--ios-radius-surface);
+  overflow: hidden;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 3px 14px rgba(91, 55, 34, 0.06);
+}
+
+.group-card__title {
+  margin: 0;
+  padding: 16px 16px 0;
+  font-size: 12px;
+  font-weight: 640;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ios-label-secondary);
+}
+
+.group-card__invite {
+  margin: 12px 16px 0;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.group-card__section {
+  padding: 14px 16px 6px;
+  font-size: 12px;
+  font-weight: 640;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ios-label-secondary);
+}
+
+.group-card__members .row {
+  background: transparent;
+}
+
+.group-card__members .row:first-child {
+  padding-top: 4px;
+}
+
+.group-card__members .row:last-child {
+  padding-bottom: 14px;
+}
+
+.group-card__empty {
+  margin: 0;
+  padding: 0 16px 16px;
+  font-size: 13px;
+  color: var(--ios-label-secondary);
+}
+
+@media (min-width: 1024px) {
+  body.app[data-layout="board"] .group-card {
+    break-inside: avoid;
+  }
+}

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="theme-color" content="#ffffff" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -13,8 +13,10 @@
     <link rel="stylesheet" href="/app/assets/css/tokens.css" />
     <link rel="stylesheet" href="/app/assets/css/app.css" />
   </head>
-  <body class="ios">
-    <div class="ios-viewport">
+  <body class="app" data-role="client" data-active="today">
+    <div class="app-shell">
+      <aside class="app-sidebar" id="app-sidebar"></aside>
+      <div class="app-main">
       <header class="nav-bar">
         <div class="nav-bar-inner">
           <span class="nav-leading">
@@ -25,7 +27,7 @@
           </span>
           <span class="nav-title">Check-In</span>
           <span class="nav-trailing">
-            <button class="nav-btn" id="mark-all" type="button">All followed</button>
+            <button class="nav-btn" id="mark-all" type="button" hidden>All followed</button>
           </span>
         </div>
       </header>
@@ -36,140 +38,110 @@
         <div class="list-group" style="margin-top: 8px">
           <div class="hero-card with-ring" style="margin: 0">
             <div>
-              <div class="hero-eyebrow">Completion</div>
+              <div class="hero-eyebrow">Check-In</div>
               <div class="hero-title">Check-in progress</div>
               <div class="hero-sub">Complete all meals to share your day with your coach.</div>
             </div>
             <div class="ring" id="checkin-ring" style="--percent: 0">
-              <span class="ring-center" id="checkin-ring-text">0/3</span>
+              <span class="ring-center" id="checkin-ring-text">0/0</span>
             </div>
           </div>
         </div>
 
-        <div class="list-group">
-          <article class="card mar-card" data-meal-id="breakfast">
-            <div class="row" style="padding: 0 0 12px">
-              <span class="row-main"><span class="row-title is-strong">Overnight oats</span><span class="row-sub">Breakfast &middot; 420 kcal planned</span></span>
-              <span class="meal-chip breakfast">Breakfast</span>
-              <span class="pill" data-state-pill>To do</span>
-            </div>
-            <div class="segmented adherence" role="group" aria-label="Breakfast status">
-              <button type="button" data-status="followed">Followed</button>
-              <button type="button" data-status="modified">Modified</button>
-              <button type="button" data-status="skipped">Skipped</button>
-            </div>
-            <div class="deviation" hidden>
-              <div class="list" style="margin-top: 12px">
-                <div class="field-row" data-modified-only>
-                  <label>Change</label>
-                  <select class="field-select">
-                    <option value="">Select&hellip;</option>
-                    <option value="ingredient_swap">Ingredient swap</option>
-                    <option value="portion_change">Portion change</option>
-                    <option value="timing_change">Timing change</option>
-                  </select>
-                </div>
-                <div class="field-stack">
-                  <textarea class="field-textarea" rows="2" placeholder="Add a note (optional)"></textarea>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
+        <div id="meals-container"></div>
 
-        <div class="list-group">
-          <article class="card mar-card" data-meal-id="lunch">
-            <div class="row" style="padding: 0 0 12px">
-              <span class="row-main"><span class="row-title is-strong">Chicken bowl</span><span class="row-sub">Lunch &middot; 610 kcal planned</span></span>
-              <span class="meal-chip lunch">Lunch</span>
-              <span class="pill" data-state-pill>To do</span>
-            </div>
-            <div class="segmented adherence" role="group" aria-label="Lunch status">
-              <button type="button" data-status="followed">Followed</button>
-              <button type="button" data-status="modified">Modified</button>
-              <button type="button" data-status="skipped">Skipped</button>
-            </div>
-            <div class="deviation" hidden>
-              <div class="list" style="margin-top: 12px">
-                <div class="field-row" data-modified-only>
-                  <label>Change</label>
-                  <select class="field-select">
-                    <option value="">Select&hellip;</option>
-                    <option value="ingredient_swap">Ingredient swap</option>
-                    <option value="portion_change">Portion change</option>
-                    <option value="timing_change">Timing change</option>
-                  </select>
-                </div>
-                <div class="field-stack">
-                  <textarea class="field-textarea" rows="2" placeholder="Add a note (optional)"></textarea>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <div class="list-group">
-          <article class="card mar-card" data-meal-id="dinner">
-            <div class="row" style="padding: 0 0 12px">
-              <span class="row-main"><span class="row-title is-strong">Salmon and rice</span><span class="row-sub">Dinner &middot; 720 kcal planned</span></span>
-              <span class="meal-chip dinner">Dinner</span>
-              <span class="pill" data-state-pill>To do</span>
-            </div>
-            <div class="segmented adherence" role="group" aria-label="Dinner status">
-              <button type="button" data-status="followed">Followed</button>
-              <button type="button" data-status="modified">Modified</button>
-              <button type="button" data-status="skipped">Skipped</button>
-            </div>
-            <div class="deviation" hidden>
-              <div class="list" style="margin-top: 12px">
-                <div class="field-row" data-modified-only>
-                  <label>Change</label>
-                  <select class="field-select">
-                    <option value="">Select&hellip;</option>
-                    <option value="ingredient_swap">Ingredient swap</option>
-                    <option value="portion_change">Portion change</option>
-                    <option value="timing_change">Timing change</option>
-                  </select>
-                </div>
-                <div class="field-stack">
-                  <textarea class="field-textarea" rows="2" placeholder="Add a note (optional)"></textarea>
-                </div>
-              </div>
-            </div>
-          </article>
+        <div class="list-group" id="empty-state" style="display: none">
+          <p class="list-footer" id="empty-text">Loading your meals&hellip;</p>
         </div>
       </main>
 
-      <div class="action-bar">
+      <div class="action-bar" id="action-bar" style="display: none">
         <div class="action-bar-inner">
           <button class="btn btn-gradient btn-block" id="submit-checkin" disabled>Submit Check-In</button>
-          <p class="action-hint" id="progress-hint">0 of 3 meals marked</p>
+          <p class="action-hint" id="progress-hint">0 of 0 meals marked</p>
         </div>
+      </div>
       </div>
     </div>
 
     <script type="module">
-      import { requireAuth } from "/app/assets/js/auth.js";
-      import { getSupabaseClient } from "/app/assets/js/supabase.js";
-      await requireAuth("client");
+      import { requireAuth, getProfile } from "/app/assets/js/auth.js";
+      import { mountAppShell } from "/app/assets/js/shell.js";
+      import { getMyGroup, getTodaysCheckinContext, submitCheckin, rememberDemoUser } from "/app/assets/js/data.js";
+      import { formatKcal } from "/app/assets/js/utils.js";
 
-      const cards = Array.from(document.querySelectorAll(".mar-card"));
+      const session = await requireAuth("client");
+      mountAppShell({ role: "client", active: "today" });
+      if (!session) throw new Error("no session");
+
+      const profile = await getProfile(session.user.id);
+      rememberDemoUser({ id: session.user.id, name: profile?.name, role: "client", email: session.user.email });
+
+      const group = await getMyGroup(session.user.id, "client");
+      if (!group) window.location.replace("/app/client/join.html");
+
+      const container = document.querySelector("#meals-container");
+      const emptyState = document.querySelector("#empty-state");
+      const emptyText = document.querySelector("#empty-text");
+      const actionBar = document.querySelector("#action-bar");
       const submitButton = document.querySelector("#submit-checkin");
       const hint = document.querySelector("#progress-hint");
       const ring = document.querySelector("#checkin-ring");
       const ringText = document.querySelector("#checkin-ring-text");
-      const statuses = new Map();
+      const markAllBtn = document.querySelector("#mark-all");
 
+      const statuses = new Map(); // mealId -> { status, deviationType, notes }
       const pillText = { followed: "Followed", modified: "Modified", skipped: "Skipped" };
       const pillClass = { followed: "is-green", modified: "is-orange", skipped: "is-red" };
+      const chipClass = { breakfast: "breakfast", lunch: "lunch", dinner: "dinner", snack: "snack" };
 
-      function syncSubmit() {
-        const done = statuses.size === cards.length;
-        submitButton.disabled = !done;
-        hint.textContent = done ? "All set \u2014 ready to submit" : `${statuses.size} of ${cards.length} meals marked`;
-        const percent = Math.round((statuses.size / cards.length) * 100);
-        ring.style.setProperty("--percent", String(percent));
-        ringText.textContent = `${statuses.size}/${cards.length}`;
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (c) =>
+          ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+        );
+      }
+
+      function titleCase(value) {
+        return String(value || "").replace(/\b\w/g, (c) => c.toUpperCase());
+      }
+
+      function mealCardHtml(meal) {
+        const type = (meal.type || "").toLowerCase();
+        const chip = chipClass[type] || "snack";
+        return `
+          <div class="list-group">
+            <article class="card mar-card" data-meal-id="${escapeHtml(meal.id)}">
+              <div class="row" style="padding: 0 0 12px">
+                <span class="row-main">
+                  <span class="row-title is-strong">${escapeHtml(meal.name)}</span>
+                  <span class="row-sub">${formatKcal(meal.totals?.calories || 0)} kcal planned</span>
+                </span>
+                <span class="meal-chip ${chip}">${escapeHtml(titleCase(meal.type))}</span>
+                <span class="pill" data-state-pill>To do</span>
+              </div>
+              <div class="segmented adherence" role="group" aria-label="${escapeHtml(meal.name)} status">
+                <button type="button" data-status="followed">Followed</button>
+                <button type="button" data-status="modified">Modified</button>
+                <button type="button" data-status="skipped">Skipped</button>
+              </div>
+              <div class="deviation" hidden>
+                <div class="list" style="margin-top: 12px">
+                  <div class="field-row" data-modified-only>
+                    <label>Change</label>
+                    <select class="field-select" data-deviation-type>
+                      <option value="">Select&hellip;</option>
+                      <option value="ingredient_swap">Ingredient swap</option>
+                      <option value="portion_change">Portion change</option>
+                      <option value="timing_change">Timing change</option>
+                    </select>
+                  </div>
+                  <div class="field-stack">
+                    <textarea class="field-textarea" rows="2" placeholder="Add a note (optional)" data-deviation-note></textarea>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>`;
       }
 
       function applyCardStatus(card, status) {
@@ -181,43 +153,110 @@
         deviation.hidden = !showDeviation;
         const modifiedOnly = card.querySelector("[data-modified-only]");
         if (modifiedOnly) modifiedOnly.style.display = status === "modified" ? "" : "none";
-
         const pill = card.querySelector("[data-state-pill]");
         pill.textContent = pillText[status] || "To do";
         pill.className = "pill " + (pillClass[status] || "");
       }
 
-      cards.forEach((card) => {
-        card.querySelectorAll(".segmented button").forEach((button) => {
-          button.addEventListener("click", () => {
-            statuses.set(card.dataset.mealId, button.dataset.status);
-            applyCardStatus(card, button.dataset.status);
-            syncSubmit();
+      function recordFromCard(card) {
+        const mealId = card.dataset.mealId;
+        const current = statuses.get(mealId) || {};
+        const typeEl = card.querySelector("[data-deviation-type]");
+        const noteEl = card.querySelector("[data-deviation-note]");
+        statuses.set(mealId, {
+          status: current.status,
+          deviationType: typeEl ? typeEl.value : null,
+          notes: noteEl ? noteEl.value : null,
+        });
+      }
+
+      function syncSubmit(total) {
+        const done = statuses.size === total && total > 0;
+        submitButton.disabled = !done;
+        hint.textContent = done ? "All set \u2014 ready to submit" : `${statuses.size} of ${total} meals marked`;
+        const percent = total ? Math.round((statuses.size / total) * 100) : 0;
+        ring.style.setProperty("--percent", String(percent));
+        ringText.textContent = `${statuses.size}/${total}`;
+      }
+
+      const { plan, meals, checkIn, records } = await getTodaysCheckinContext(session.user.id);
+
+      if (!plan) {
+        emptyState.style.display = "";
+        emptyText.innerHTML = 'No approved plan yet. <a href="/app/client/plan/index.html" data-nav>Go to your plan</a> to get started.';
+      } else if (!meals.length) {
+        emptyState.style.display = "";
+        emptyText.textContent = "No meals are planned for today.";
+      } else if (checkIn && checkIn.status === "submitted") {
+        emptyState.style.display = "";
+        emptyText.innerHTML = 'You already submitted today\u2019s check-in. <a href="/app/client/home.html" data-nav>Back to Today</a>.';
+      } else {
+        container.innerHTML = meals.map(mealCardHtml).join("");
+        actionBar.style.display = "";
+        markAllBtn.hidden = false;
+
+        const cards = Array.from(container.querySelectorAll(".mar-card"));
+
+        // Restore any previously recorded statuses (in-progress check-in).
+        cards.forEach((card) => {
+          const existing = records[card.dataset.mealId];
+          if (existing?.status) {
+            statuses.set(card.dataset.mealId, {
+              status: existing.status,
+              deviationType: existing.deviation_type || null,
+              notes: existing.notes || null,
+            });
+            applyCardStatus(card, existing.status);
+          }
+        });
+
+        cards.forEach((card) => {
+          card.querySelectorAll(".segmented button").forEach((button) => {
+            button.addEventListener("click", () => {
+              const current = statuses.get(card.dataset.mealId) || {};
+              statuses.set(card.dataset.mealId, { ...current, status: button.dataset.status });
+              applyCardStatus(card, button.dataset.status);
+              recordFromCard(card);
+              syncSubmit(cards.length);
+            });
+          });
+          card.querySelectorAll("[data-deviation-type], [data-deviation-note]").forEach((el) => {
+            el.addEventListener("input", () => recordFromCard(card));
           });
         });
-      });
 
-      document.querySelector("#mark-all").addEventListener("click", () => {
-        cards.forEach((card) => {
-          statuses.set(card.dataset.mealId, "followed");
-          applyCardStatus(card, "followed");
+        markAllBtn.addEventListener("click", () => {
+          cards.forEach((card) => {
+            statuses.set(card.dataset.mealId, { status: "followed", deviationType: null, notes: null });
+            applyCardStatus(card, "followed");
+          });
+          syncSubmit(cards.length);
         });
-        syncSubmit();
-      });
 
-      submitButton.addEventListener("click", async () => {
-        localStorage.setItem(
-          "demo.checkin",
-          JSON.stringify({ date: new Date().toISOString().slice(0, 10), statuses: Object.fromEntries(statuses) })
-        );
-        const supabase = getSupabaseClient();
-        if (supabase) {
-          // Integration point: insert daily_check_ins + meal_adherence_records.
-        }
-        window.location.assign("/app/client/checkin/confirm.html");
-      });
+        submitButton.addEventListener("click", async () => {
+          submitButton.disabled = true;
+          hint.textContent = "Submitting\u2026";
+          const marks = Array.from(statuses.entries()).map(([mealId, value]) => ({
+            mealId,
+            status: value.status,
+            deviationType: value.deviationType,
+            notes: value.notes,
+          }));
+          const { error } = await submitCheckin({
+            clientId: session.user.id,
+            planId: plan.id,
+            marks,
+          });
+          if (error) {
+            hint.textContent = error.message || "Could not submit. Try again.";
+            submitButton.disabled = false;
+            return;
+          }
+          window.location.assign("/app/client/checkin/confirm.html");
+        });
 
-      syncSubmit();
+        syncSubmit(cards.length);
+      }
     </script>
   </body>
 </html>

@@ -4,17 +4,19 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="theme-color" content="#ffffff" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="manifest" href="/app/manifest.json" />
-    <title>Meal Plan</title>
+    <link rel="icon" type="image/png" sizes="192x192" href="/app/assets/icons/pwa/icon-192.png" />
+    <link rel="apple-touch-icon" href="/app/assets/icons/pwa/apple-touch-icon.png" />
+    <title>Bite Club</title>
     <link rel="stylesheet" href="/app/assets/css/tokens.css" />
     <link rel="stylesheet" href="/app/assets/css/app.css" />
   </head>
-  <body class="ios">
+  <body class="app-auth">
     <div class="ios-viewport">
       <main class="center-screen">
         <span class="auth-logo" aria-hidden="true">
@@ -26,6 +28,7 @@
 
     <script type="module">
       import { getSession, getProfile } from "/app/assets/js/auth.js";
+      import { getMyGroup, rememberDemoUser } from "/app/assets/js/data.js";
 
       async function bootstrap() {
         const session = await getSession();
@@ -34,11 +37,16 @@
           return;
         }
         const profile = await getProfile(session.user.id);
-        if (profile?.role === "coach") {
-          window.location.replace("/app/coach/home.html");
+        const role = profile?.role || "client";
+        rememberDemoUser({ id: session.user.id, name: profile?.name, role, email: session.user.email });
+
+        const group = await getMyGroup(session.user.id, role);
+
+        if (role === "coach") {
+          window.location.replace(group ? "/app/coach/home.html" : "/app/coach/group.html");
           return;
         }
-        window.location.replace("/app/client/home.html");
+        window.location.replace(group ? "/app/client/home.html" : "/app/client/join.html");
       }
 
       bootstrap();

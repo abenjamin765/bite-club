@@ -53,7 +53,7 @@ Solo dash. Owner simulates all disciplines. No group workshop.
 - **Privacy:** Coach-client private by default; no peer visibility in MVP
 - **Team:** Solo builder
 - **Launch:** Soft launch ~12 users
-- **PWA capabilities:** Service worker, offline draft editing, background sync, push notifications where supported
+- **PWA capabilities:** Installable PWA + service worker. **Offline draft editing, background sync, and push notifications are DEFERRED for the soft-launch pilot** (2026-06-30 launch-readiness panel) — the pilot service worker caches the app shell only and assumes connectivity. These are required before scale launch, not before the ~12-user pilot.
 - **Nutrition data:** Manual entry with optional database lookup (USDA FoodData Central / Open Food Facts)
 - **Billing, HIPAA posture, geography:** TBD / not blocking soft launch
 

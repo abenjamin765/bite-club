@@ -1,4 +1,5 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import projectConfig from "./supabase-config.js";
 
 function readFromMeta(name) {
   const element = document.querySelector(`meta[name="${name}"]`);
@@ -11,11 +12,13 @@ function readSupabaseConfig() {
     fromWindow.url ||
     readFromMeta("supabase-url") ||
     localStorage.getItem("supabase.url") ||
+    projectConfig.url ||
     "";
   const key =
     fromWindow.anonKey ||
     readFromMeta("supabase-anon-key") ||
     localStorage.getItem("supabase.anonKey") ||
+    projectConfig.anonKey ||
     "";
   return { url, key };
 }

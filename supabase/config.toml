@@ -1,0 +1,41 @@
+# Bite Club — https://supabase.com/dashboard/project/marhszyalzvqwbdcbkqn
+project_id = "marhszyalzvqwbdcbkqn"
+
+[db.migrations]
+enabled = true
+
+# Branded auth emails — HTML in supabase/templates/
+# Deploy: supabase config push (requires custom SMTP on free tier; see README)
+[auth.email.template.confirmation]
+subject = "Confirm your Bite Club account"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your Bite Club password"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.magic_link]
+subject = "Your Bite Club sign-in link"
+content_path = "./supabase/templates/magic_link.html"
+
+[auth.email.template.invite]
+subject = "You're invited to Bite Club"
+content_path = "./supabase/templates/invite.html"
+
+[auth.email.template.email_change]
+subject = "Confirm your new Bite Club email"
+content_path = "./supabase/templates/email_change.html"
+
+[auth.email.template.reauthentication]
+subject = "{{ .Token }} is your Bite Club verification code"
+content_path = "./supabase/templates/reauthentication.html"
+
+# After enabling custom SMTP in the dashboard, uncomment and fill in:
+# [auth.email.smtp]
+# enabled = true
+# host = "smtp.resend.com"
+# port = 465
+# user = "resend"
+# pass = "env(RESEND_API_KEY)"
+# admin_email = "no-reply@yourdomain.com"
+# sender_name = "Bite Club"

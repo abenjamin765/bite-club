@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bite Club</title>
+    <script>
+      (function () {
+        var search = window.location.search || "";
+        var hash = window.location.hash || "";
+        var isAuthRedirect =
+          search.indexOf("code=") !== -1 ||
+          search.indexOf("error=") !== -1 ||
+          hash.indexOf("access_token=") !== -1 ||
+          hash.indexOf("type=") !== -1;
+
+        if (isAuthRedirect) {
+          window.location.replace("/app/auth/callback.html" + search + hash);
+          return;
+        }
+
+        window.location.replace("/app/index.html");
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

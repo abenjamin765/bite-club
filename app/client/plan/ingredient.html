@@ -4,99 +4,260 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="theme-color" content="#ffffff" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <title>Ingredients</title>
+    <title>Meal</title>
     <link rel="stylesheet" href="/app/assets/css/tokens.css" />
     <link rel="stylesheet" href="/app/assets/css/app.css" />
   </head>
-  <body class="ios">
-    <div class="ios-viewport">
-      <header class="nav-bar">
-        <div class="nav-bar-inner">
-          <span class="nav-leading">
-            <a class="nav-btn" href="/app/client/plan/day.html" data-nav>
-              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-              Back
-            </a>
-          </span>
-          <span class="nav-title">Ingredients</span>
-          <span class="nav-trailing">
-            <a class="nav-btn is-strong" href="/app/client/plan/index.html" data-nav>Done</a>
-          </span>
-        </div>
-      </header>
+  <body class="app" data-role="client" data-active="plan">
+    <div class="app-shell">
+      <aside class="app-sidebar" id="app-sidebar"></aside>
+      <div class="app-main">
+        <header class="nav-bar">
+          <div class="nav-bar-inner">
+            <span class="nav-leading">
+              <a class="nav-btn" id="back-link" href="/app/client/plan/index.html" data-nav>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                <span id="back-label">Day</span>
+              </a>
+            </span>
+            <span class="nav-title">Meal</span>
+            <span class="nav-trailing">
+              <a class="nav-btn is-strong" id="done-link" href="/app/client/plan/index.html" data-nav>Done</a>
+            </span>
+          </div>
+        </header>
 
-      <main class="ios-scroll has-actionbar">
-        <h1 class="large-title" id="meal-title">Chicken bowl</h1>
+        <main class="ios-scroll has-actionbar">
+          <h1 class="large-title" id="meal-title">Meal</h1>
+          <p class="large-title-sub" id="meal-sub">&nbsp;</p>
 
-        <div class="list-group">
-          <div class="list-header">In this meal</div>
-          <div class="list">
-            <div class="row">
-              <span class="row-main"><span class="row-title">Chicken breast</span><span class="row-sub">1 serving &middot; 165 kcal</span></span>
-              <span class="meal-chip lunch">Protein</span>
-              <span class="row-value">35g P</span>
-            </div>
-            <div class="row">
-              <span class="row-main"><span class="row-title">Jasmine rice</span><span class="row-sub">1 cup &middot; 205 kcal</span></span>
-              <span class="meal-chip snack">Carb</span>
-              <span class="row-value">45g C</span>
+          <div class="list-group">
+            <div class="list-header">Meal total</div>
+            <div class="stat-group">
+              <div class="stat"><div class="stat-value" id="m-kcal">0</div><div class="stat-label">kcal</div></div>
+              <div class="stat"><div class="stat-value" id="m-protein">0g</div><div class="stat-label">Protein</div></div>
+              <div class="stat"><div class="stat-value" id="m-carbs">0g</div><div class="stat-label">Carbs</div></div>
+              <div class="stat"><div class="stat-value" id="m-fat">0g</div><div class="stat-label">Fat</div></div>
             </div>
           </div>
-        </div>
 
-        <div class="list-group">
-          <div class="list-header">Add ingredient</div>
-          <div class="list">
-            <div class="field-row">
-              <input class="field-input" id="ing-name" placeholder="Search or enter a food" />
-            </div>
-            <div class="field-row">
-              <label for="ing-qty">Quantity</label>
-              <input class="field-input" id="ing-qty" type="number" step="0.1" value="1" inputmode="decimal" />
-            </div>
-            <div class="field-row">
-              <label for="ing-unit">Unit</label>
-              <input class="field-input" id="ing-unit" value="serving" />
-            </div>
+          <div class="list-group">
+            <div class="list-header">Ingredients</div>
+            <div class="list" id="ingredient-list"></div>
+            <p class="list-footer" id="ingredient-empty" style="display: none">No ingredients yet. Add one below.</p>
           </div>
-        </div>
 
-        <div class="list-group">
-          <div class="list-header">Copy from saved meals</div>
-          <div class="list">
-            <button class="row is-tappable" type="button">
-              <span class="row-main"><span class="row-title">Chicken and rice bowl</span><span class="row-sub">4 ingredients</span></span>
-              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
-            <button class="row is-tappable" type="button">
-              <span class="row-main"><span class="row-title">Protein oatmeal</span><span class="row-sub">3 ingredients</span></span>
-              <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
+          <section id="editor">
+            <div class="list-group">
+              <div class="list-header">Add ingredient</div>
+              <div class="list">
+                <div class="field-row">
+                  <input class="field-input" id="ing-name" placeholder="Food name" autocomplete="off" />
+                </div>
+                <div class="field-row">
+                  <label for="ing-qty">Quantity</label>
+                  <input class="field-input" id="ing-qty" type="number" step="0.1" min="0" value="1" inputmode="decimal" />
+                </div>
+                <div class="field-row">
+                  <label for="ing-unit">Unit</label>
+                  <input class="field-input" id="ing-unit" value="serving" autocomplete="off" />
+                </div>
+                <div class="field-row">
+                  <label for="ing-cal">Calories</label>
+                  <input class="field-input" id="ing-cal" type="number" step="1" min="0" placeholder="0" inputmode="numeric" />
+                </div>
+                <div class="field-row">
+                  <label for="ing-protein">Protein (g)</label>
+                  <input class="field-input" id="ing-protein" type="number" step="0.1" min="0" placeholder="0" inputmode="decimal" />
+                </div>
+                <div class="field-row">
+                  <label for="ing-carbs">Carbs (g)</label>
+                  <input class="field-input" id="ing-carbs" type="number" step="0.1" min="0" placeholder="0" inputmode="decimal" />
+                </div>
+                <div class="field-row">
+                  <label for="ing-fat">Fat (g)</label>
+                  <input class="field-input" id="ing-fat" type="number" step="0.1" min="0" placeholder="0" inputmode="decimal" />
+                </div>
+              </div>
+              <div style="padding: 12px 16px 0">
+                <button class="btn btn-gradient btn-block" id="add-ingredient">Add Ingredient</button>
+                <p class="helper-text" id="add-message" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div class="list-group">
+              <button class="btn btn-gray btn-block" id="save-meal" type="button">Save to my meals</button>
+              <p class="helper-text" id="save-message" aria-live="polite"></p>
+            </div>
+          </section>
+        </main>
+
+        <div class="action-bar" id="action-bar" style="display: none">
+          <div class="action-bar-inner">
+            <button class="btn btn-destructive btn-block" id="remove-meal" type="button">Remove Meal</button>
           </div>
-        </div>
-      </main>
-
-      <div class="action-bar">
-        <div class="action-bar-inner">
-          <button class="btn btn-gradient btn-block" id="add-ingredient">Add Ingredient</button>
         </div>
       </div>
     </div>
 
     <script type="module">
       import { requireAuth } from "/app/assets/js/auth.js";
-      import { bindNavLinks } from "/app/assets/js/router.js";
+      import { mountAppShell } from "/app/assets/js/shell.js";
+      import {
+        getMeal,
+        addIngredient,
+        deleteIngredient,
+        deleteMeal,
+        saveMealToLibrary,
+        isPlanEditable,
+      } from "/app/assets/js/data.js";
+      import { formatKcal, formatGrams, titleCase, escapeHtml } from "/app/assets/js/utils.js";
 
-      await requireAuth("client");
-      bindNavLinks();
+      const session = await requireAuth("client");
+      mountAppShell({ role: "client", active: "plan" });
+      if (!session) throw new Error("no session");
 
-      const lastMeal = localStorage.getItem("demo.lastMealName");
-      if (lastMeal) document.querySelector("#meal-title").textContent = lastMeal;
+      const mealId = new URLSearchParams(window.location.search).get("meal");
+      if (!mealId) {
+        window.location.replace("/app/client/plan/index.html");
+        throw new Error("no meal");
+      }
+
+      const trashIcon =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>';
+
+      let editable = true;
+      let backDate = null;
+
+      async function render() {
+        const detail = await getMeal(mealId);
+        if (!detail) {
+          window.location.replace("/app/client/plan/index.html");
+          return;
+        }
+        editable = isPlanEditable(detail.plan);
+        backDate = detail.date;
+
+        // Back + Done route to the owning day.
+        if (backDate) {
+          const dayHref = `/app/client/plan/day.html?date=${backDate}`;
+          document.querySelector("#back-link").setAttribute("href", dayHref);
+          document.querySelector("#done-link").setAttribute("href", dayHref);
+        }
+
+        document.querySelector("#meal-title").textContent = detail.meal.name;
+        document.querySelector("#meal-sub").textContent = titleCase(detail.meal.type);
+
+        const t = detail.totals;
+        document.querySelector("#m-kcal").textContent = formatKcal(t.calories);
+        document.querySelector("#m-protein").textContent = formatGrams(t.protein) + "g";
+        document.querySelector("#m-carbs").textContent = formatGrams(t.carbs) + "g";
+        document.querySelector("#m-fat").textContent = formatGrams(t.fat) + "g";
+
+        const list = document.querySelector("#ingredient-list");
+        const empty = document.querySelector("#ingredient-empty");
+        if (!detail.ingredients.length) {
+          list.innerHTML = "";
+          empty.style.display = "";
+        } else {
+          empty.style.display = "none";
+          list.innerHTML = detail.ingredients
+            .map((ing) => {
+              const macros = `${formatGrams(ing.protein)}g P · ${formatGrams(ing.carbs)}g C · ${formatGrams(ing.fat)}g F`;
+              const qty = `${formatGrams(ing.quantity)} ${escapeHtml(ing.unit || "serving")}`;
+              const del = editable
+                ? `<button class="icon-btn" data-del="${escapeHtml(ing.id)}" aria-label="Remove ${escapeHtml(ing.name)}">${trashIcon}</button>`
+                : "";
+              return `
+                <div class="row">
+                  <span class="row-main">
+                    <span class="row-title is-strong">${escapeHtml(ing.name)}</span>
+                    <span class="row-sub">${qty} · ${macros}</span>
+                  </span>
+                  <span class="row-value">${formatKcal(ing.calories)} kcal</span>
+                  ${del}
+                </div>`;
+            })
+            .join("");
+        }
+
+        document.querySelector("#editor").style.display = editable ? "" : "none";
+        document.querySelector("#action-bar").style.display = editable ? "" : "none";
+      }
+
+      await render();
+
+      const fields = {
+        name: document.querySelector("#ing-name"),
+        qty: document.querySelector("#ing-qty"),
+        unit: document.querySelector("#ing-unit"),
+        cal: document.querySelector("#ing-cal"),
+        protein: document.querySelector("#ing-protein"),
+        carbs: document.querySelector("#ing-carbs"),
+        fat: document.querySelector("#ing-fat"),
+      };
+      const addBtn = document.querySelector("#add-ingredient");
+      const addMessage = document.querySelector("#add-message");
+
+      addBtn.addEventListener("click", async () => {
+        const name = fields.name.value.trim();
+        if (!name) {
+          addMessage.textContent = "Enter a food name.";
+          return;
+        }
+        addBtn.disabled = true;
+        addMessage.textContent = "Adding…";
+        const { error } = await addIngredient(mealId, {
+          name,
+          quantity: fields.qty.value,
+          unit: fields.unit.value,
+          calories: fields.cal.value,
+          protein: fields.protein.value,
+          carbs: fields.carbs.value,
+          fat: fields.fat.value,
+        });
+        addBtn.disabled = false;
+        if (error) {
+          addMessage.textContent = error.message || "Could not add ingredient.";
+          return;
+        }
+        // Reset for the next entry.
+        fields.name.value = "";
+        fields.qty.value = "1";
+        fields.unit.value = "serving";
+        ["cal", "protein", "carbs", "fat"].forEach((k) => (fields[k].value = ""));
+        addMessage.textContent = "";
+        fields.name.focus();
+        await render();
+      });
+
+      document.querySelector("#ingredient-list").addEventListener("click", async (event) => {
+        const btn = event.target.closest("[data-del]");
+        if (!btn) return;
+        btn.disabled = true;
+        await deleteIngredient(btn.getAttribute("data-del"));
+        await render();
+      });
+
+      const saveBtn = document.querySelector("#save-meal");
+      const saveMessage = document.querySelector("#save-message");
+      saveBtn.addEventListener("click", async () => {
+        saveBtn.disabled = true;
+        saveMessage.textContent = "Saving…";
+        const { error } = await saveMealToLibrary(session.user.id, mealId);
+        saveBtn.disabled = false;
+        saveMessage.textContent = error ? error.message || "Could not save." : "Saved to your meals.";
+      });
+
+      document.querySelector("#remove-meal").addEventListener("click", async () => {
+        await deleteMeal(mealId);
+        window.location.assign(backDate ? `/app/client/plan/day.html?date=${backDate}` : "/app/client/plan/index.html");
+      });
     </script>
   </body>
 </html>

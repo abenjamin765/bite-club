@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Check-In</title>
+    <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+    <link rel="stylesheet" href="/app/assets/css/app.css" />
+  </head>
+  <body class="app" data-role="coach" data-active="digest" data-layout="board">
+    <div class="app-shell">
+      <aside class="app-sidebar" id="app-sidebar"></aside>
+      <div class="app-main">
+        <header class="nav-bar">
+          <div class="nav-bar-inner">
+            <span class="nav-leading">
+              <a class="nav-btn" id="back-link" href="/app/coach/group.html" data-nav>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                Group
+              </a>
+            </span>
+            <span class="nav-title">Check-In</span>
+          </div>
+        </header>
+
+        <main class="ios-scroll has-tabbar">
+          <h1 class="large-title" id="client-name">Check-In</h1>
+          <p class="large-title-sub" id="checkin-meta">Loading&hellip;</p>
+
+          <div id="meal-body"></div>
+
+          <div class="list-group" id="empty-state" style="display: none">
+            <p class="list-footer" id="empty-text"></p>
+          </div>
+        </main>
+
+        <nav class="tab-bar" id="app-tabbar"></nav>
+      </div>
+    </div>
+
+    <script type="module">
+      import { requireAuth } from "/app/assets/js/auth.js";
+      import { mountAppShell } from "/app/assets/js/shell.js";
+      import { bindNavLinks } from "/app/assets/js/router.js";
+      import { getMyGroup, getGroupMembers, getCoachCheckinDetail } from "/app/assets/js/data.js";
+      import { formatKcal } from "/app/assets/js/utils.js";
+
+      const session = await requireAuth("coach");
+      mountAppShell({ role: "coach", active: "dashboard", mobileTabs: true });
+      if (!session) throw new Error("no session");
+
+      const params = new URLSearchParams(window.location.search);
+      const clientId = params.get("client");
+      const BACK = {
+        digest: { href: "/app/coach/digest.html", label: "Digest" },
+        dashboard: { href: "/app/coach/home.html", label: "Dashboard" },
+        group: { href: "/app/coach/group.html", label: "Group" },
+      };
+      const back = BACK[params.get("from")] || BACK.group;
+      const backLink = document.querySelector("#back-link");
+      backLink.href = back.href;
+      backLink.innerHTML = `<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>${back.label}`;
+
+      const DEVIATION_LABELS = {
+        ingredient_swap: "Ingredient swap",
+        portion_change: "Portion change",
+        timing_change: "Timing change",
+      };
+      const STATUS_PILL = {
+        followed: { label: "Followed", className: "is-green" },
+        modified: { label: "Modified", className: "is-orange" },
+        skipped: { label: "Skipped", className: "is-red" },
+      };
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (c) =>
+          ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+        );
+      }
+      function titleCase(value) {
+        return String(value || "").replace(/\b\w/g, (c) => c.toUpperCase());
+      }
+      function formatDateLabel(iso) {
+        return new Intl.DateTimeFormat("en-US", {
+          weekday: "long",
+          month: "short",
+          day: "numeric",
+        }).format(new Date(`${iso}T12:00:00`));
+      }
+      function formatSubmittedAt(iso) {
+        if (!iso) return "";
+        const mins = Math.max(1, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+        if (mins < 60) return `Submitted ${mins}m ago`;
+        const hrs = Math.round(mins / 60);
+        if (hrs < 24) return `Submitted ${hrs}h ago`;
+        return `Submitted ${Math.round(hrs / 24)}d ago`;
+      }
+      function adherenceSummary(meals) {
+        const submitted = meals.filter((m) => m.adherence?.status);
+        if (!submitted.length) return "";
+        const modified = submitted.filter((m) => m.adherence.status === "modified").length;
+        const skipped = submitted.filter((m) => m.adherence.status === "skipped").length;
+        const parts = [];
+        if (modified) parts.push(`${modified} modified`);
+        if (skipped) parts.push(`${skipped} skipped`);
+        return parts.length ? parts.join(", ") : "All meals followed";
+      }
+
+      if (!clientId) {
+        document.querySelector("#empty-state").style.display = "";
+        document.querySelector("#empty-text").innerHTML =
+          'No client selected. <a href="/app/coach/group.html" data-nav>Back to group</a>.';
+        bindNavLinks();
+        throw new Error("no client");
+      }
+
+      const group = await getMyGroup(session.user.id, "coach");
+      const members = group ? await getGroupMembers(group.id) : [];
+      const isMember = members.some((m) => m.id === clientId);
+      if (!isMember) {
+        document.querySelector("#empty-state").style.display = "";
+        document.querySelector("#empty-text").textContent = "This client is not in your group.";
+        throw new Error("not a member");
+      }
+
+      const detail = await getCoachCheckinDetail(clientId);
+      const clientName = detail.client?.name || "Client";
+      document.querySelector("#client-name").textContent = clientName;
+
+      if (!detail.plan) {
+        document.querySelector("#checkin-meta").textContent = "No approved plan yet";
+        document.querySelector("#empty-state").style.display = "";
+        document.querySelector("#empty-text").textContent =
+          "This client has not had a plan approved yet.";
+      } else if (!detail.meals.length) {
+        document.querySelector("#checkin-meta").textContent = formatDateLabel(detail.dateIso);
+        document.querySelector("#empty-state").style.display = "";
+        document.querySelector("#empty-text").textContent =
+          "No meals are planned for this day.";
+      } else if (!detail.checkIn || detail.checkIn.status !== "submitted") {
+        document.querySelector("#checkin-meta").textContent =
+          `${formatDateLabel(detail.dateIso)} \u00b7 No check-in submitted`;
+        document.querySelector("#meal-body").innerHTML = `
+          <div class="list-group">
+            <div class="list-header">Planned meals</div>
+            <div class="list">
+              ${detail.meals
+                .map((meal) => {
+                  const type = (meal.type || "").toLowerCase();
+                  return `
+                    <div class="row">
+                      <span class="row-main">
+                        <span class="row-title is-strong">${escapeHtml(meal.name)}</span>
+                        <span class="row-sub">${formatKcal(meal.totals?.calories || 0)} kcal planned</span>
+                      </span>
+                      <span class="meal-chip ${escapeHtml(type)}">${escapeHtml(titleCase(meal.type))}</span>
+                      <span class="pill">Not reported</span>
+                    </div>`;
+                })
+                .join("")}
+            </div>
+          </div>`;
+      } else {
+        const summary = adherenceSummary(detail.meals);
+        const submittedLabel = formatSubmittedAt(detail.checkIn.submitted_at);
+        document.querySelector("#checkin-meta").textContent = [
+          formatDateLabel(detail.dateIso),
+          submittedLabel,
+          summary,
+        ]
+          .filter(Boolean)
+          .join(" \u00b7 ");
+
+        document.querySelector("#meal-body").innerHTML = `
+          <div class="list-group">
+            <div class="list-header">Planned vs actual</div>
+            <div class="list">
+              ${detail.meals
+                .map((meal) => {
+                  const type = (meal.type || "").toLowerCase();
+                  const status = meal.adherence?.status;
+                      const pill = STATUS_PILL[status] || { label: "Not reported", className: "" };
+                  let sub = `${formatKcal(meal.totals?.calories || 0)} kcal planned`;
+                  if (status === "followed") {
+                    sub = "Followed as planned";
+                  } else if (status === "modified" || status === "skipped") {
+                    const deviation = meal.adherence.deviation_type
+                      ? DEVIATION_LABELS[meal.adherence.deviation_type] || meal.adherence.deviation_type
+                      : null;
+                    const note = meal.adherence.notes?.trim();
+                    const parts = [];
+                    if (deviation) parts.push(deviation);
+                    if (note) parts.push(note);
+                    sub = parts.length ? parts.join(" \u00b7 ") : "No details noted";
+                  }
+                  return `
+                    <div class="row">
+                      <span class="row-main">
+                        <span class="row-title is-strong">${escapeHtml(meal.name)}</span>
+                        <span class="row-sub">${escapeHtml(sub)}</span>
+                      </span>
+                      <span class="meal-chip ${escapeHtml(type)}">${escapeHtml(titleCase(meal.type))}</span>
+                      <span class="pill${pill.className ? ` ${pill.className}` : ""}">${escapeHtml(pill.label)}</span>
+                    </div>`;
+                })
+                .join("")}
+            </div>
+          </div>`;
+      }
+
+      bindNavLinks();
+    </script>
+  </body>
+</html>

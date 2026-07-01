@@ -163,3 +163,79 @@ sophia (standard), pat (standard), mira (standard), ace (ruthless — user overr
 
 ## Open follow-ups not in this plan
 - "Mark all followed" vs per-meal confirm performance — defer to P8 usability test (re-entry trigger set for A-002/A-019).
+
+---
+---
+
+# Panel Review: Bite Club — Launch Readiness for Beta Cohort
+
+**Date**: 2026-06-30
+**Reviewed by**: Adversarial Panel (7 arguing voices + Sage)
+**Roster**: sophia, pat, dev, ace, mobile-user, newcomer, skeptic (+ sage) — all `ruthless`
+**Source**: `/app/**` (built PWA), `supabase/migrations/**`, dash artifacts
+**Question on the table**: Are we ready to launch to the ~12-user beta cohort (1 coach + ~11 clients)?
+**Stance**: `ruthless` (pre-ship gate)
+
+## TL;DR Decision
+
+**No-Go as-is.** The core value loop is half-connected: plan submission writes to Supabase, but
+check-in submit only writes to `localStorage`, the coach digest is hardcoded sample data, and the
+"Approve Plan" button has no handler. SC-3 (real digest) and SC-4 (full loop) fail today. Privacy
+architecture (RLS) is well-designed; a11y and offline have real but pilot-survivable gaps. Hold ~1
+week to wire the loop, verify the backend, and close the demo-auth bypass.
+
+## Blocking findings (grounded)
+
+1. **Check-in does not persist** — `app/client/checkin/index.html` submit is `localStorage.setItem`
+   with a `// Integration point` comment. No `daily_check_ins` / `meal_adherence_records` insert.
+2. **Coach digest is fixtures** — `app/coach/digest.html` and `home.html` render hardcoded clients
+   (Taylor M., Jordan P., Alex R., Jamie K.). Coach never sees real check-ins. SC-3 fails.
+3. **Coach approval is a no-op** — `app/coach/plan-review.html` "Approve Plan" / "Request Changes"
+   have no click handlers and the page is hardcoded to "Alex R.".
+4. **Meal/ingredient creation does not persist** — `plan/day.html` navigates without writing.
+5. **No group / membership foundation** — only one `group_id` reference in the whole app, reading an
+   unset `localStorage("demo.groupId")`. `weekly_meal_plans.group_id` is `NOT NULL` and RLS
+   coach-visibility is keyed on group membership, so the loop cannot run on a real backend until a
+   group create/invite/join flow exists. (Discovered during execution; larger than initial estimate.)
+6. **Backend unverifiable / wrong project connected** — app points to Supabase project
+   `marhszyalzvqwbdcbkqn`; the Supabase MCP is connected to an unrelated project
+   `ylmqmxbbxurccnexylqx` (an LMS). The Bite Club schema + RLS migrations cannot be confirmed
+   deployed via current tooling. **Open question — owner: Aaron.**
+7. **Demo-auth bypass** — with no Supabase config, `signIn` accepts any email/password and
+   `getProfile` reads role from `localStorage` (a client can self-assign `coach`). Must fail closed
+   in production.
+8. **a11y** — every page shipped `maximum-scale=1.0, user-scalable=no` (WCAG 1.4.4). Skip-link /
+   `aria-live` parity inconsistent across pages. Built pages never re-audited.
+9. **PWA offline claim unmet** — service worker caches only `index.html` + 3 CSS files; no app pages
+   or JS. Scope promised offline draft editing.
+
+## Strengths defended
+- RLS migration `002_rls.sql` is comprehensive and correct (client-owns / coach-scoped-through-group).
+- Plan submit is correctly wired with `onConflict`.
+- Check-in UX (All-followed shortcut, segmented control, progressive deviation capture) supports SC-1.
+- Neutral adherence language and non-color-only status are faithful to research and the a11y floor.
+
+## Contested points
+1. **Launchable product vs clickable prototype** (Dev ↔ Pat): converged — remaining work is small in
+   code but a hard blocker until done; from the user's seat "unfinished wiring" == "doesn't work".
+2. **Digest theater** (Skeptic ↔ Pat): converged — digest must read live data AND show an honest
+   empty state; fixtures risk cohort collapse through the coach.
+3. **Pilot exceptions for a11y/offline** (Ace + Mobile ↔ Dev): zoom fix non-negotiable (trivial);
+   offline deferrable only if the scope claim is explicitly amended.
+
+## Action plan status (as executed 2026-06-30)
+- [x] Task 5 — Removed zoom-disable from all 12 app pages (WCAG 1.4.4).
+- [x] Task 7 — Amended scope §2.5 (offline deferred for pilot) + added consent entry on auth +
+      created `app/legal/privacy.html` pilot privacy summary.
+- [ ] Task 1 — Wire check-in persistence. **Blocked** on backend confirmation (finding 6) + group
+      foundation (finding 5).
+- [ ] Task 2 — Wire coach approve / request-changes. **Blocked** same root cause.
+- [ ] Task 3 — Digest/dashboard read live data + empty states. **Blocked** same root cause.
+- [ ] Task 4 — Verify RLS deployed + close demo-auth bypass. **Open question** — MCP points to the
+      wrong project; needs Aaron to confirm/connect the Bite Club project.
+- [ ] Task 6 — First-run empty states. **Blocked** same root cause (depends on real data pipeline).
+
+## Open questions (panel did not converge / needs Aaron)
+- Which Supabase project is canonical for Bite Club, and are `001_schema.sql` + `002_rls.sql` applied?
+- Is there an intended group create/invite/join flow, or should clients be pre-provisioned for the pilot?
+- Is consented-pilot legal posture sufficient given privacy gate is `escalated` / sign-off `pending`?

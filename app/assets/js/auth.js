@@ -27,14 +27,21 @@ export async function getSession() {
   return data.session;
 }
 
-export async function signUp(email, password) {
+export async function signUp(email, password, { name = "", role = "client" } = {}) {
   const supabase = getSupabaseClient();
   if (!supabase) {
     const fake = { user: { id: crypto.randomUUID(), email } };
     writeStoredSession(fake);
     return { data: { session: fake }, error: null };
   }
-  return supabase.auth.signUp({ email, password });
+  return supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: `${window.location.origin}/app/auth/callback.html`,
+      data: { name, role },
+    },
+  });
 }
 
 export async function signIn(email, password) {
@@ -55,6 +62,48 @@ export async function signOut() {
     return;
   }
   await supabase.auth.signOut();
+}
+
+/**
+ * Upsert public.users from an auth session. On sign-in, pass role=null so an
+ * existing role is preserved (the hidden signup role field defaults to client).
+ */
+export async function syncUserProfile(session, { email, name, role = null } = {}) {
+  const user = session?.user;
+  if (!user) return;
+
+  const meta = user.user_metadata || {};
+  const resolvedEmail = email || user.email || "";
+  const supabase = getSupabaseClient();
+
+  if (!supabase) {
+    if (role) localStorage.setItem("demo.role", role);
+    return;
+  }
+
+  let resolvedRole = role || meta.role || null;
+  let resolvedName = name || meta.name || "";
+
+  if (!resolvedRole || !resolvedName) {
+    const { data: existing } = await supabase
+      .from("users")
+      .select("role, name")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (!resolvedRole) resolvedRole = existing?.role || "client";
+    if (!resolvedName) resolvedName = existing?.name || resolvedEmail.split("@")[0] || "User";
+  }
+
+  await supabase.from("users").upsert(
+    {
+      id: user.id,
+      email: resolvedEmail,
+      name: resolvedName,
+      role: resolvedRole,
+      time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+    },
+    { onConflict: "id" }
+  );
 }
 
 export async function getProfile(userId) {

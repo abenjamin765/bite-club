@@ -1,5 +1,5 @@
 /**
- * Design tokens — Coach-Led Meal Planning MVP
+ * Design tokens — Bite Club
  * Palette source: ColorSpace monochromatic from #FF6B00
  * https://mycolor.space/?hex=%23FF6B00&sub=1
  */
@@ -167,6 +167,9 @@
   --touch-min: 44px;
   --phone-min-height: 760px;
   --phone-min-height-sm: 700px;
+  --sidebar-w: 244px;
+  --content-narrow: 720px;
+  --content-board: 1120px;
   --content-max: 402px;
   --submit-scrim-height: 96px;
 }

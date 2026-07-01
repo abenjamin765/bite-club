@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Confirming sign-in</title>
+    <link rel="stylesheet" href="/app/assets/css/tokens.css" />
+    <link rel="stylesheet" href="/app/assets/css/app.css" />
+  </head>
+  <body class="app-auth">
+    <div class="ios-viewport">
+      <main class="center-screen">
+        <span class="auth-logo" aria-hidden="true">
+          <img src="/app/assets/brand-mark.svg" alt="" />
+        </span>
+        <h1 class="center-title">Confirming your account</h1>
+        <p class="center-sub" id="status">Finishing sign-in&hellip;</p>
+        <p class="helper-text" id="error" hidden aria-live="polite"></p>
+        <a class="btn btn-tinted btn-block" href="/app/auth/index.html" id="back-link" hidden>Back to log in</a>
+      </main>
+    </div>
+
+    <script type="module">
+      import { getSupabaseClient } from "/app/assets/js/supabase.js";
+      import { syncUserProfile } from "/app/assets/js/auth.js";
+
+      const status = document.querySelector("#status");
+      const errorEl = document.querySelector("#error");
+      const backLink = document.querySelector("#back-link");
+
+      function showError(message) {
+        status.textContent = "Something went wrong";
+        errorEl.textContent = message;
+        errorEl.hidden = false;
+        errorEl.classList.add("is-error");
+        backLink.hidden = false;
+      }
+
+      async function finishAuth() {
+        const supabase = getSupabaseClient();
+        if (!supabase) {
+          showError("Supabase is not configured for this environment.");
+          return;
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const errorDescription = params.get("error_description");
+        if (errorDescription) {
+          showError(decodeURIComponent(errorDescription.replace(/\+/g, " ")));
+          return;
+        }
+
+        const code = params.get("code");
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) {
+            showError(error.message);
+            return;
+          }
+        }
+
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) {
+          showError(error.message);
+          return;
+        }
+
+        if (session) {
+          await syncUserProfile(session);
+          window.location.replace("/app/index.html");
+          return;
+        }
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, nextSession) => {
+          if (!nextSession) {
+            return;
+          }
+          subscription.unsubscribe();
+          await syncUserProfile(nextSession);
+          window.location.replace("/app/index.html");
+        });
+
+        window.setTimeout(() => {
+          if (window.location.pathname.includes("callback")) {
+            showError("Could not complete sign-in. Try logging in with your email and password.");
+          }
+        }, 8000);
+      }
+
+      finishAuth();
+    </script>
+  </body>
+</html>
